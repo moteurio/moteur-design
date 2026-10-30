@@ -1,0 +1,1300 @@
+{
+  "version": 1.1,
+  "properties": [
+    {
+      "name": "--action",
+      "description": {
+        "kind": "markdown",
+        "value": "Primary buttons (Publish, Save, New). Pair with on-action.\n\n- Discothèque: Lights on `#b8491a`, Lights off `#e57a47`\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--avocado",
+      "description": {
+        "kind": "markdown",
+        "value": "Large fills for 'live' and success areas (tiles, stubs). Text on it: on-avocado, and only large (18.5px bold or 24px).\n\n- Discothèque: Lights on `#7a8b3a`, Lights off `#9db050`\n- Folio: Light `#18794e`, Dark `#5cc08f`"
+      }
+    },
+    {
+      "name": "--backdrop",
+      "description": {
+        "kind": "markdown",
+        "value": "The dimmed backdrop behind dialogs. Folio only; Discothèque tints each backdrop in its own rule.\n\n- Folio: Light `var(--folio-overlay)` → `rgba(16, 24, 40, 0.45)`, Dark `var(--folio-overlay)` → `rgba(0, 0, 0, 0.6)`"
+      }
+    },
+    {
+      "name": "--border-field",
+      "description": {
+        "kind": "markdown",
+        "value": "Width of a text input's edge.\n\n- Discothèque: `1.5px`\n- Folio: `1px`"
+      }
+    },
+    {
+      "name": "--border-object",
+      "description": {
+        "kind": "markdown",
+        "value": "Outline of every card, input, button and pill.\n\n- Discothèque: `2px`\n- Folio: `1px`"
+      }
+    },
+    {
+      "name": "--border-strong",
+      "description": {
+        "kind": "markdown",
+        "value": "Dialogs, palette, selected presence ring.\n\n- Discothèque: `3px`\n- Folio: `1px`"
+      }
+    },
+    {
+      "name": "--chocolate",
+      "description": {
+        "kind": "markdown",
+        "value": "Top bar, command palette shadow, toasts, code wells, the offline banner.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#0e0805`\n- Folio: Light `#ffffff`, Dark `#191d23`"
+      }
+    },
+    {
+      "name": "--chocolate-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Sidebar ground; inputs inside the top bar.\n\n- Discothèque: Lights on `#5a3822`, Lights off `#160d07`\n- Folio: Light `#ffffff`, Dark `#191d23`"
+      }
+    },
+    {
+      "name": "--divider",
+      "description": {
+        "kind": "markdown",
+        "value": "A whole border value for the line between rows.\n\n- Discothèque: Lights on `var(--border-object) dotted var(--rule)` → `2px dotted #d9c49a`, Lights off `var(--border-object) dotted var(--rule)` → `2px dotted #4a3020`\n- Folio: Light `1px solid var(--rule)` → `1px solid #dde1e6`, Dark `1px solid var(--rule)` → `1px solid #2c333c`"
+      }
+    },
+    {
+      "name": "--duration-drift",
+      "description": {
+        "kind": "markdown",
+        "value": "Things arriving on their own: presence, live updates, page transitions.\n\n- Discothèque: `600ms`\n- Folio: `400ms`"
+      }
+    },
+    {
+      "name": "--duration-glide",
+      "description": {
+        "kind": "markdown",
+        "value": "Panels and drawers sliding, list items moving.\n\n- Discothèque: `360ms`\n- Folio: `250ms`"
+      }
+    },
+    {
+      "name": "--duration-pen",
+      "description": {
+        "kind": "markdown",
+        "value": "Lines that draw themselves: ticks, underlines, rings, the seal.\n\n- Discothèque: `340ms`\n- Folio: `420ms`"
+      }
+    },
+    {
+      "name": "--duration-pop",
+      "description": {
+        "kind": "markdown",
+        "value": "Things you caused appearing: ticks, chips, popovers.\n\n- Discothèque: `320ms`\n- Folio: `150ms`"
+      }
+    },
+    {
+      "name": "--duration-snap",
+      "description": {
+        "kind": "markdown",
+        "value": "Presses, hovers, toggles' squish.\n\n- Discothèque: `120ms`\n- Folio: `100ms`"
+      }
+    },
+    {
+      "name": "--ease-drift",
+      "description": {
+        "kind": "markdown",
+        "value": "Drift: symmetric, calm.\n\n- Discothèque: `cubic-bezier(0.45, 0, 0.55, 1)`\n- Folio: `cubic-bezier(0.2, 0, 0, 1)`"
+      }
+    },
+    {
+      "name": "--ease-glide",
+      "description": {
+        "kind": "markdown",
+        "value": "Glide: fast out, soft landing.\n\n- Discothèque: `cubic-bezier(0.2, 0.9, 0.3, 1)`\n- Folio: `cubic-bezier(0.2, 0, 0, 1)`"
+      }
+    },
+    {
+      "name": "--ease-pen",
+      "description": {
+        "kind": "markdown",
+        "value": "Lines that draw themselves: ticks, underlines, rings, the seal.\n\n- Discothèque: `cubic-bezier(0.65, 0, 0.35, 1)`\n- Folio: `cubic-bezier(0.65, 0, 0.35, 1)`"
+      }
+    },
+    {
+      "name": "--ease-shake",
+      "description": {
+        "kind": "markdown",
+        "value": "Error shake only.\n\n- Discothèque: `cubic-bezier(0.36, 0.07, 0.19, 0.97)`\n- Folio: `cubic-bezier(0.36, 0.07, 0.19, 0.97)`"
+      }
+    },
+    {
+      "name": "--ease-spring",
+      "description": {
+        "kind": "markdown",
+        "value": "Snap and pop: a small overshoot. Motion spring: stiffness 400, damping 22.\n\n- Discothèque: `cubic-bezier(0.3, 1.6, 0.5, 1)`\n- Folio: `cubic-bezier(0.2, 0, 0, 1)`"
+      }
+    },
+    {
+      "name": "--field",
+      "description": {
+        "kind": "markdown",
+        "value": "Inside text inputs and editors only, so typing surfaces read as paper you write on.\n\n- Discothèque: Lights on `#ffffff`, Lights off `#170e08`\n- Folio: Light `#ffffff`, Dark `#14181d`"
+      }
+    },
+    {
+      "name": "--field-label-case",
+      "description": {
+        "kind": "markdown",
+        "value": "text-transform of field labels.\n\n- Discothèque: `none`\n- Folio: `none`"
+      }
+    },
+    {
+      "name": "--field-label-size",
+      "description": {
+        "kind": "markdown",
+        "value": "Size of field labels.\n\n- Discothèque: `13px`\n- Folio: `13px`"
+      }
+    },
+    {
+      "name": "--field-label-tracking",
+      "description": {
+        "kind": "markdown",
+        "value": "Letter spacing of field labels.\n\n- Discothèque: `0`\n- Folio: `0`"
+      }
+    },
+    {
+      "name": "--focus",
+      "description": {
+        "kind": "markdown",
+        "value": "3px focus ring offset 2px, on every interactive element, with --focus-edge filling the gap inside it: mustard alone is 1.8:1 on Lights-on paper.\n\n- Discothèque: `#e1a730`\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--focus-edge",
+      "description": {
+        "kind": "markdown",
+        "value": "The focus ring's inner edge, drawn under the outline with `box-shadow: 0 0 0 2px var(--focus-edge)`. Transparent in Folio.\n\n- Discothèque: `var(--on-mustard)` → `#3b2416`\n- Folio: `transparent`"
+      }
+    },
+    {
+      "name": "--focus-ring",
+      "description": {
+        "kind": "markdown",
+        "value": "Width of the focus ring, drawn 2px outside the element.\n\n- Discothèque: `3px`\n- Folio: `2px`"
+      }
+    },
+    {
+      "name": "--folio-accent",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. The one brand colour: primary buttons, the selected tab's underline, checked switches and checkboxes, progress, the focus ring. Discothèque role: action (and mustard for selection).\n\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--folio-accent-hover",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Primary button hover and press.\n\n- Folio: Light `#194fa6`, Dark `#8db4f5`"
+      }
+    },
+    {
+      "name": "--folio-accent-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Selected nav item, selected row, the active segment, highlighted search match, a field that just changed. Discothèque role: mustard as a selection fill.\n\n- Folio: Light `#e8f0fc`, Dark `#17253b`"
+      }
+    },
+    {
+      "name": "--folio-accent-text",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Links, the selected nav item's text, and text on accent-soft (≥5.5:1 on surface, canvas and accent-soft).\n\n- Folio: Light `#1c56b3`, Dark `#8db4f5`"
+      }
+    },
+    {
+      "name": "--folio-border",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. 1px hairline around cards, tables, panels and between rows. Decorative only: never the only edge of a control. Discothèque role: rule.\n\n- Folio: Light `#dde1e6`, Dark `#2c333c`"
+      }
+    },
+    {
+      "name": "--folio-border-strong",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. 1px outline of inputs, switches, checkboxes and secondary buttons: ≥3:1 on surface, field, canvas and surface-sunk in both themes.\n\n- Folio: Light `#7d8794`, Dark `#6e7987`"
+      }
+    },
+    {
+      "name": "--folio-canvas",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Page ground behind lists, the editor and settings. Discothèque role: paper.\n\n- Folio: Light `#f5f6f8`, Dark `#111418`"
+      }
+    },
+    {
+      "name": "--folio-danger",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Errors and destructive actions: text and icons on surface, canvas and danger-soft; danger button fill. Discothèque role: rust.\n\n- Folio: Light `#b42318`, Dark `#f2877d`"
+      }
+    },
+    {
+      "name": "--folio-danger-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Background of blocking problems, Changes-asked badges and deleted text in diffs. Discothèque role: rust-soft.\n\n- Folio: Light `#fdecea`, Dark `#3a1714`"
+      }
+    },
+    {
+      "name": "--folio-field",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Inside inputs, selects and the rich-text editor.\n\n- Folio: Light `#ffffff`, Dark `#14181d`"
+      }
+    },
+    {
+      "name": "--folio-focus",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. 2px focus ring, offset 2px, on every interactive element: ≥4.5:1 on canvas, surface and field in both themes.\n\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--folio-info",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Scheduled state and informational notes: text and icons on surface, canvas and info-soft. Discothèque role: teal.\n\n- Folio: Light `#0b6e85`, Dark `#5ec2da`"
+      }
+    },
+    {
+      "name": "--folio-info-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Background of Scheduled badges and info notes. Discothèque role: teal-soft.\n\n- Folio: Light `#e2f3f7`, Dark `#10292f`"
+      }
+    },
+    {
+      "name": "--folio-inverse",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Toasts, tooltips and the offline banner: the one dark-on-light (or light-on-dark) object. Discothèque role: chocolate.\n\n- Folio: Light `#1a2029`, Dark `#e8ebef`"
+      }
+    },
+    {
+      "name": "--folio-on-accent",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Text and icons on accent and accent-hover (≥5.7:1 light, ≥7:1 dark).\n\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--folio-on-danger",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Text on a danger fill.\n\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--folio-on-inverse",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Text on inverse (≥13:1).\n\n- Folio: Light `#f5f6f8`, Dark `#111418`"
+      }
+    },
+    {
+      "name": "--folio-on-inverse-accent",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. The action word in a toast (Undo, View): ≥5:1 on inverse in both themes.\n\n- Folio: Light `#8db4f5`, Dark `#1c56b3`"
+      }
+    },
+    {
+      "name": "--folio-on-presence",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Initials and name-tab text on any presence colour (≥4.5:1 on all six in both themes).\n\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--folio-on-success",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Text on a success fill.\n\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--folio-overlay",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Dimmed backdrop behind dialogs and the command palette.\n\n- Folio: Light `rgba(16, 24, 40, 0.45)`, Dark `rgba(0, 0, 0, 0.6)`"
+      }
+    },
+    {
+      "name": "--folio-presence-1",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. First person on a screen: avatar, field tab, caret. Text on it: on-presence.\n\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--folio-presence-2",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Second person. Text on it: on-presence.\n\n- Folio: Light `#18794e`, Dark `#5cc08f`"
+      }
+    },
+    {
+      "name": "--folio-presence-3",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Third person. Text on it: on-presence.\n\n- Folio: Light `#a04f06`, Dark `#eda25f`"
+      }
+    },
+    {
+      "name": "--folio-presence-4",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Fourth person. Text on it: on-presence.\n\n- Folio: Light `#0b6e85`, Dark `#5ec2da`"
+      }
+    },
+    {
+      "name": "--folio-presence-5",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Fifth person. Text on it: on-presence.\n\n- Folio: Light `#b42318`, Dark `#f2877d`"
+      }
+    },
+    {
+      "name": "--folio-presence-6",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Sixth person; never a status. Text on it: on-presence.\n\n- Folio: Light `#7a3fa0`, Dark `#c59be0`"
+      }
+    },
+    {
+      "name": "--folio-shadow-drag",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Anything being dragged.\n\n- Folio: Light `0 12px 24px rgba(16, 24, 40, 0.18)`, Dark `0 12px 24px rgba(0, 0, 0, 0.6)`"
+      }
+    },
+    {
+      "name": "--folio-shadow-l",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Dialogs, the command palette, drawers.\n\n- Folio: Light `0 16px 40px rgba(16, 24, 40, 0.18), 0 2px 6px rgba(16, 24, 40, 0.08)`, Dark `0 16px 40px rgba(0, 0, 0, 0.65)`"
+      }
+    },
+    {
+      "name": "--folio-shadow-m",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Menus, popovers, link previews, toasts.\n\n- Folio: Light `0 4px 12px rgba(16, 24, 40, 0.10), 0 1px 3px rgba(16, 24, 40, 0.06)`, Dark `0 4px 12px rgba(0, 0, 0, 0.55)`"
+      }
+    },
+    {
+      "name": "--folio-shadow-s",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Cards in a dashboard and hovered media cards. Lists and tables use border only.\n\n- Folio: Light `0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04)`, Dark `0 1px 3px rgba(0, 0, 0, 0.5)`"
+      }
+    },
+    {
+      "name": "--folio-shadow-xs",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Buttons and inputs at rest.\n\n- Folio: Light `0 1px 2px rgba(16, 24, 40, 0.05)`, Dark `0 1px 2px rgba(0, 0, 0, 0.4)`"
+      }
+    },
+    {
+      "name": "--folio-success",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Live badge fill, Approve buttons, done ticks; text on surface, canvas and success-soft.\n\n- Folio: Light `#18794e`, Dark `#5cc08f`"
+      }
+    },
+    {
+      "name": "--folio-success-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Approved badges, inserted text in diffs, 'all caught up' notices.\n\n- Folio: Light `#e6f4ec`, Dark `#12301f`"
+      }
+    },
+    {
+      "name": "--folio-surface",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Cards, tables, panels, dialogs, the top bar and the sidebar. Discothèque role: paper-raised.\n\n- Folio: Light `#ffffff`, Dark `#191d23`"
+      }
+    },
+    {
+      "name": "--folio-surface-hover",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Hovered rows, nav items and menu options; empty translation cells. Discothèque role: paper-tint.\n\n- Folio: Light `#f0f3f7`, Dark `#222830`"
+      }
+    },
+    {
+      "name": "--folio-surface-sunk",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Board columns, progress tracks, code wells in light, skeleton base, the Draft badge. Discothèque role: paper-sunk.\n\n- Folio: Light `#edeff2`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--folio-text",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Primary text on canvas, surface, surface-sunk, surface-hover and field (≥13:1 in both themes). Discothèque role: ink.\n\n- Folio: Light `#1a2029`, Dark `#e8ebef`"
+      }
+    },
+    {
+      "name": "--folio-text-muted",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Secondary text, metadata, field labels' hints, counts. ≥6:1 on canvas, surface and surface-sunk in both themes.\n\n- Folio: Light `#4f5a68`, Dark `#aab3bf`"
+      }
+    },
+    {
+      "name": "--folio-text-subtle",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Placeholders, timestamps in dense rows, disabled labels. ≥4.5:1 on canvas, surface and surface-sunk; never the only copy of an instruction.\n\n- Folio: Light `#5e6978`, Dark `#939daa`"
+      }
+    },
+    {
+      "name": "--folio-type-article",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Type square for articles in link chips and search results. Letter on it: on-presence.\n\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--folio-type-event",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Type square for events.\n\n- Folio: Light `#0b6e85`, Dark `#5ec2da`"
+      }
+    },
+    {
+      "name": "--folio-type-media",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Type square for media.\n\n- Folio: Light `#7a3fa0`, Dark `#c59be0`"
+      }
+    },
+    {
+      "name": "--folio-type-person",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Type square for people.\n\n- Folio: Light `#18794e`, Dark `#5cc08f`"
+      }
+    },
+    {
+      "name": "--folio-warning",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Warning text and icons: suggestions, counters near a limit, In-review badge text. Text on surface, canvas and warning-soft. Discothèque role: warning-ink.\n\n- Folio: Light `#8a5a00`, Dark `#e5b454`"
+      }
+    },
+    {
+      "name": "--folio-warning-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. In-review and unpublished-edits badges, suggestion rows, freshly added rows. Discothèque role: mustard-soft.\n\n- Folio: Light `#fff4db`, Dark `#33270d`"
+      }
+    },
+    {
+      "name": "--font-body",
+      "description": {
+        "kind": "markdown",
+        "value": "Body and UI text.\n\n- Discothèque: `\"Karla Variable\", \"Karla\", \"Avenir Next\", \"Segoe UI\", system-ui, sa…`\n- Folio: `'IBM Plex Sans Variable', \"IBM Plex Sans\", \"Segoe UI\", system-ui, s…`"
+      }
+    },
+    {
+      "name": "--font-celebrate",
+      "description": {
+        "kind": "markdown",
+        "value": "Celebrations only; at most once per session.\n\n- Discothèque: `\"Shrikhand\", \"Fraunces\", Georgia, serif`\n- Folio: `'IBM Plex Sans Variable', \"IBM Plex Sans\", \"Segoe UI\", system-ui, s…`"
+      }
+    },
+    {
+      "name": "--font-display",
+      "description": {
+        "kind": "markdown",
+        "value": "Display type: page and entry titles, headings.\n\n- Discothèque: `\"Fraunces Variable\", \"Fraunces\", \"Iowan Old Style\", Georgia, serif`\n- Folio: `'IBM Plex Sans Variable', \"IBM Plex Sans\", \"Segoe UI\", system-ui, s…`"
+      }
+    },
+    {
+      "name": "--font-empty",
+      "description": {
+        "kind": "markdown",
+        "value": "Empty states.\n\n- Discothèque: `\"Bagel Fat One\", \"Karla\", system-ui, sans-serif`\n- Folio: `'IBM Plex Sans Variable', \"IBM Plex Sans\", \"Segoe UI\", system-ui, s…`"
+      }
+    },
+    {
+      "name": "--font-mono",
+      "description": {
+        "kind": "markdown",
+        "value": "Code, ids, keys and keyboard hints.\n\n- Discothèque: `\"JetBrains Mono Variable\", \"JetBrains Mono\", ui-monospace, \"SFMono-…`\n- Folio: `\"IBM Plex Mono\", ui-monospace, \"SFMono-Regular\", Menlo, monospace`"
+      }
+    },
+    {
+      "name": "--font-typewriter",
+      "description": {
+        "kind": "markdown",
+        "value": "Memo-style cards.\n\n- Discothèque: `\"Courier Prime\", \"Courier New\", monospace`\n- Folio: `\"Courier Prime\", \"Courier New\", monospace`"
+      }
+    },
+    {
+      "name": "--fs-14",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-14, …)` with Discothèque's size as the fallback.\n\n- Folio: `13px`"
+      }
+    },
+    {
+      "name": "--fs-15",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-15, …)` with Discothèque's size as the fallback.\n\n- Folio: `14px`"
+      }
+    },
+    {
+      "name": "--fs-16",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-16, …)` with Discothèque's size as the fallback.\n\n- Folio: `14px`"
+      }
+    },
+    {
+      "name": "--fs-17",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-17, …)` with Discothèque's size as the fallback.\n\n- Folio: `15px`"
+      }
+    },
+    {
+      "name": "--fs-18",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-18, …)` with Discothèque's size as the fallback.\n\n- Folio: `16px`"
+      }
+    },
+    {
+      "name": "--fs-dialog",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-dialog, …)` with Discothèque's size as the fallback.\n\n- Folio: `18px`"
+      }
+    },
+    {
+      "name": "--fs-empty",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-empty, …)` with Discothèque's size as the fallback.\n\n- Folio: `16px`"
+      }
+    },
+    {
+      "name": "--fs-entry",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-entry, …)` with Discothèque's size as the fallback.\n\n- Folio: `26px`"
+      }
+    },
+    {
+      "name": "--fs-field",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-field, …)` with Discothèque's size as the fallback.\n\n- Folio: `16px`"
+      }
+    },
+    {
+      "name": "--fs-hero",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-hero, …)` with Discothèque's size as the fallback.\n\n- Folio: `28px`"
+      }
+    },
+    {
+      "name": "--fs-item",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-item, …)` with Discothèque's size as the fallback.\n\n- Folio: `14px`"
+      }
+    },
+    {
+      "name": "--fs-mark",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-mark, …)` with Discothèque's size as the fallback.\n\n- Folio: `15px`"
+      }
+    },
+    {
+      "name": "--fs-num",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-num, …)` with Discothèque's size as the fallback.\n\n- Folio: `20px`"
+      }
+    },
+    {
+      "name": "--fs-page",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-page, …)` with Discothèque's size as the fallback.\n\n- Folio: `22px`"
+      }
+    },
+    {
+      "name": "--fs-poster",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-poster, …)` with Discothèque's size as the fallback.\n\n- Folio: `48px`"
+      }
+    },
+    {
+      "name": "--fs-section",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-section, …)` with Discothèque's size as the fallback.\n\n- Folio: `16px`"
+      }
+    },
+    {
+      "name": "--fs-sub",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the size Folio uses where component CSS writes `font-size: var(--fs-sub, …)` with Discothèque's size as the fallback.\n\n- Folio: `15px`"
+      }
+    },
+    {
+      "name": "--fw-bold",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the weight Folio uses where component CSS writes `font-weight: var(--fw-bold, …)` with Discothèque's weight as the fallback.\n\n- Folio: `600`"
+      }
+    },
+    {
+      "name": "--fw-empty",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the weight Folio uses where component CSS writes `font-weight: var(--fw-empty, …)` with Discothèque's weight as the fallback.\n\n- Folio: `600`"
+      }
+    },
+    {
+      "name": "--fw-heavy",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: the weight Folio uses where component CSS writes `font-weight: var(--fw-heavy, …)` with Discothèque's weight as the fallback.\n\n- Folio: `600`"
+      }
+    },
+    {
+      "name": "--ink",
+      "description": {
+        "kind": "markdown",
+        "value": "Primary text and the 2px outline of every object (cards, dialogs, tables, buttons). 12:1 on paper.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#f7ebd0`\n- Folio: Light `#1a2029`, Dark `#e8ebef`"
+      }
+    },
+    {
+      "name": "--ink-line",
+      "description": {
+        "kind": "markdown",
+        "value": "The 1.5px edge of text inputs, search boxes and editors; ink on hover and focus. Objects keep ink. ≥3:1 on field, paper and paper-sunk in both themes.\n\n- Discothèque: Lights on `#8a7763`, Lights off `#8a7558`\n- Folio: Light `#7d8794`, Dark `#6e7987`"
+      }
+    },
+    {
+      "name": "--ink-muted",
+      "description": {
+        "kind": "markdown",
+        "value": "Secondary text, metadata, labels. ≥6:1 on paper and paper-raised in both themes.\n\n- Discothèque: Lights on `#6b4f36`, Lights off `#c9b28a`\n- Folio: Light `#4f5a68`, Dark `#aab3bf`"
+      }
+    },
+    {
+      "name": "--ink-subtle",
+      "description": {
+        "kind": "markdown",
+        "value": "Placeholders, drag grips, disabled text. Still ≥5:1; never for the only copy of an instruction.\n\n- Discothèque: Lights on `#7a5d42`, Lights off `#a8906c`\n- Folio: Light `#5e6978`, Dark `#939daa`"
+      }
+    },
+    {
+      "name": "--inverse",
+      "description": {
+        "kind": "markdown",
+        "value": "The one dark-on-light object: toasts, tooltips.\n\n- Discothèque: Lights on `var(--chocolate)` → `#3b2416`, Lights off `var(--chocolate)` → `#0e0805`\n- Folio: Light `var(--folio-inverse)` → `#1a2029`, Dark `var(--folio-inverse)` → `#e8ebef`"
+      }
+    },
+    {
+      "name": "--label-case",
+      "description": {
+        "kind": "markdown",
+        "value": "text-transform of eyebrows and section labels.\n\n- Discothèque: `uppercase`\n- Folio: `none`"
+      }
+    },
+    {
+      "name": "--label-color",
+      "description": {
+        "kind": "markdown",
+        "value": "Colour of labels.\n\n- Discothèque: Lights on `var(--ink-muted)` → `#6b4f36`, Lights off `var(--ink-muted)` → `#c9b28a`\n- Folio: Light `var(--ink)` → `#1a2029`, Dark `var(--ink)` → `#e8ebef`"
+      }
+    },
+    {
+      "name": "--label-size",
+      "description": {
+        "kind": "markdown",
+        "value": "Size of eyebrows and section labels.\n\n- Discothèque: `12px`\n- Folio: `13px`"
+      }
+    },
+    {
+      "name": "--label-tracking",
+      "description": {
+        "kind": "markdown",
+        "value": "Letter spacing of eyebrows and section labels.\n\n- Discothèque: `0.12em`\n- Folio: `0`"
+      }
+    },
+    {
+      "name": "--label-weight",
+      "description": {
+        "kind": "markdown",
+        "value": "Weight of eyebrows and section labels.\n\n- Discothèque: `700`\n- Folio: `500`"
+      }
+    },
+    {
+      "name": "--lift",
+      "description": {
+        "kind": "markdown",
+        "value": "How far a hovered object rises.\n\n- Discothèque: `-1px`\n- Folio: `0px`"
+      }
+    },
+    {
+      "name": "--link",
+      "description": {
+        "kind": "markdown",
+        "value": "Links in text.\n\n- Discothèque: Lights on `var(--rust)` → `#a8401a`, Lights off `var(--rust)` → `#f0a27a`\n- Folio: Light `var(--folio-accent-text)` → `#1c56b3`, Dark `var(--folio-accent-text)` → `#8db4f5`"
+      }
+    },
+    {
+      "name": "--mustard",
+      "description": {
+        "kind": "markdown",
+        "value": "The signature fill: selected item, 'needs you' tiles, review state, highlights. Always with ink text (6.7:1).\n\n- Discothèque: `#e1a730`\n- Folio: Light `#e8f0fc`, Dark `#17253b`"
+      }
+    },
+    {
+      "name": "--mustard-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Inserted text in diffs, freshly added rows, warning suggestions.\n\n- Discothèque: Lights on `#fff1c7`, Lights off `#3a2a0c`\n- Folio: Light `#fff4db`, Dark `#33270d`"
+      }
+    },
+    {
+      "name": "--on-action",
+      "description": {
+        "kind": "markdown",
+        "value": "Text on action: 5.2:1 light, 6.4:1 dark.\n\n- Discothèque: Lights on `#ffffff`, Lights off `#1c110a`\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--on-avocado",
+      "description": {
+        "kind": "markdown",
+        "value": "Large text on avocado: ink in Lights on (3.8:1), Lights-off paper in Lights off (7.7:1), where cream ink would be 2.0:1.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#1c110a`\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--on-chocolate",
+      "description": {
+        "kind": "markdown",
+        "value": "Text on chocolate and chocolate-soft (12:1).\n\n- Discothèque: `#f7ebd0`\n- Folio: Light `#1a2029`, Dark `#e8ebef`"
+      }
+    },
+    {
+      "name": "--on-chocolate-accent",
+      "description": {
+        "kind": "markdown",
+        "value": "An accent on the top bar and sidebar.\n\n- Discothèque: `var(--mustard)` → `#e1a730`\n- Folio: Light `var(--folio-accent-text)` → `#1c56b3`, Dark `var(--folio-accent-text)` → `#8db4f5`"
+      }
+    },
+    {
+      "name": "--on-chocolate-muted",
+      "description": {
+        "kind": "markdown",
+        "value": "Secondary text in the top bar and sidebar.\n\n- Discothèque: Lights on `#e9d6b0`, Lights off `#c9b28a`\n- Folio: Light `#4f5a68`, Dark `#aab3bf`"
+      }
+    },
+    {
+      "name": "--on-inverse",
+      "description": {
+        "kind": "markdown",
+        "value": "Text on --inverse.\n\n- Discothèque: `var(--on-chocolate)` → `#f7ebd0`\n- Folio: Light `var(--folio-on-inverse)` → `#f5f6f8`, Dark `var(--folio-on-inverse)` → `#111418`"
+      }
+    },
+    {
+      "name": "--on-inverse-accent",
+      "description": {
+        "kind": "markdown",
+        "value": "The action word in a toast (Undo, View).\n\n- Discothèque: `var(--mustard)` → `#e1a730`\n- Folio: Light `var(--folio-on-inverse-accent)` → `#8db4f5`, Dark `var(--folio-on-inverse-accent)` → `#1c56b3`"
+      }
+    },
+    {
+      "name": "--on-mustard",
+      "description": {
+        "kind": "markdown",
+        "value": "Text on mustard in both themes (6.7:1).\n\n- Discothèque: `#3b2416`\n- Folio: Light `#1c56b3`, Dark `#8db4f5`"
+      }
+    },
+    {
+      "name": "--on-plum",
+      "description": {
+        "kind": "markdown",
+        "value": "Text on plum and teal fills (presence tabs, type squares).\n\n- Discothèque: Lights on `#ffffff`, Lights off `#1c110a`\n- Folio: Light `#ffffff`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--orange",
+      "description": {
+        "kind": "markdown",
+        "value": "Decorative fills and display italics ≥28px, stripes, cursors. NOT for small text or white-on-orange buttons (3.7:1).\n\n- Discothèque: Lights on `#d9622b`, Lights off `#e57a47`\n- Folio: Light `#1f5fc4`, Dark `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--outline",
+      "description": {
+        "kind": "markdown",
+        "value": "The edge of objects: cards, tables, panels.\n\n- Discothèque: Lights on `var(--ink)` → `#3b2416`, Lights off `var(--ink)` → `#f7ebd0`\n- Folio: Light `var(--folio-border)` → `#dde1e6`, Dark `var(--folio-border)` → `#2c333c`"
+      }
+    },
+    {
+      "name": "--outline-control",
+      "description": {
+        "kind": "markdown",
+        "value": "The edge of controls: buttons, switches, checkboxes.\n\n- Discothèque: Lights on `var(--ink)` → `#3b2416`, Lights off `var(--ink)` → `#f7ebd0`\n- Folio: Light `var(--folio-border-strong)` → `#7d8794`, Dark `var(--folio-border-strong)` → `#6e7987`"
+      }
+    },
+    {
+      "name": "--outline-field",
+      "description": {
+        "kind": "markdown",
+        "value": "The edge of a text input at rest.\n\n- Discothèque: Lights on `var(--ink-line)` → `#8a7763`, Lights off `var(--ink-line)` → `#8a7558`\n- Folio: Light `var(--ink-line)` → `#7d8794`, Dark `var(--ink-line)` → `#6e7987`"
+      }
+    },
+    {
+      "name": "--outline-field-active",
+      "description": {
+        "kind": "markdown",
+        "value": "The edge of a text input, hovered or focused.\n\n- Discothèque: Lights on `var(--ink)` → `#3b2416`, Lights off `var(--ink)` → `#f7ebd0`\n- Folio: Light `var(--ink-line)` → `#7d8794`, Dark `var(--ink-line)` → `#6e7987`"
+      }
+    },
+    {
+      "name": "--paper",
+      "description": {
+        "kind": "markdown",
+        "value": "Page ground behind everything. The Studio never sits on white.\n\n- Discothèque: Lights on `#f7ebd0`, Lights off `#1c110a`\n- Folio: Light `#f5f6f8`, Dark `#111418`"
+      }
+    },
+    {
+      "name": "--paper-raised",
+      "description": {
+        "kind": "markdown",
+        "value": "Cards, tiles, inputs' surroundings, dialogs: anything that is an object on the page.\n\n- Discothèque: Lights on `#fffaf0`, Lights off `#2a1a10`\n- Folio: Light `#ffffff`, Dark `#191d23`"
+      }
+    },
+    {
+      "name": "--paper-sunk",
+      "description": {
+        "kind": "markdown",
+        "value": "Board columns, progress tracks, wells, skeleton base.\n\n- Discothèque: Lights on `#efdfbc`, Lights off `#24170e`\n- Folio: Light `#edeff2`, Dark `#0d1014`"
+      }
+    },
+    {
+      "name": "--paper-tint",
+      "description": {
+        "kind": "markdown",
+        "value": "Hover on rows and tiles; empty translation cells; dashed drop zones.\n\n- Discothèque: Lights on `#fbefd6`, Lights off `#33200f`\n- Folio: Light `#f0f3f7`, Dark `#222830`"
+      }
+    },
+    {
+      "name": "--plum",
+      "description": {
+        "kind": "markdown",
+        "value": "Sixth presence colour; never a status.\n\n- Discothèque: Lights on `#7a3b5a`, Lights off `#d9a0bc`\n- Folio: Light `#7a3fa0`, Dark `#c59be0`"
+      }
+    },
+    {
+      "name": "--press",
+      "description": {
+        "kind": "markdown",
+        "value": "How far a primary button travels into its shadow when pressed.\n\n- Discothèque: `3px`\n- Folio: `0px`"
+      }
+    },
+    {
+      "name": "--r-10",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: Folio's corner where component CSS writes `border-radius: var(--r-10, 10px)`.\n\n- Folio: `6px`"
+      }
+    },
+    {
+      "name": "--r-12",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: Folio's corner where component CSS writes `border-radius: var(--r-12, 12px)`.\n\n- Folio: `6px`"
+      }
+    },
+    {
+      "name": "--r-16",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: Folio's corner where component CSS writes `border-radius: var(--r-16, 16px)`.\n\n- Folio: `8px`"
+      }
+    },
+    {
+      "name": "--r-22",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: Folio's corner where component CSS writes `border-radius: var(--r-22, 22px)`.\n\n- Folio: `8px`"
+      }
+    },
+    {
+      "name": "--r-9",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only: Folio's corner where component CSS writes `border-radius: var(--r-9, 9px)`.\n\n- Folio: `4px`"
+      }
+    },
+    {
+      "name": "--radius-badge",
+      "description": {
+        "kind": "markdown",
+        "value": "Corner of badges and pills.\n\n- Discothèque: `var(--radius-pill)` → `999px`\n- Folio: `4px`"
+      }
+    },
+    {
+      "name": "--radius-button",
+      "description": {
+        "kind": "markdown",
+        "value": "Corner of buttons.\n\n- Discothèque: `var(--radius-pill)` → `999px`\n- Folio: `6px`"
+      }
+    },
+    {
+      "name": "--radius-l",
+      "description": {
+        "kind": "markdown",
+        "value": "Cards, tiles, panels.\n\n- Discothèque: `22px`\n- Folio: `8px`"
+      }
+    },
+    {
+      "name": "--radius-m",
+      "description": {
+        "kind": "markdown",
+        "value": "Inputs, list containers, sub-field rows.\n\n- Discothèque: `14px`\n- Folio: `6px`"
+      }
+    },
+    {
+      "name": "--radius-pill",
+      "description": {
+        "kind": "markdown",
+        "value": "Buttons, pills, segmented controls, avatars.\n\n- Discothèque: `999px`\n- Folio: `999px`"
+      }
+    },
+    {
+      "name": "--radius-s",
+      "description": {
+        "kind": "markdown",
+        "value": "Kbd boxes, link chips, thumbnails in rows.\n\n- Discothèque: `8px`\n- Folio: `4px`"
+      }
+    },
+    {
+      "name": "--radius-xl",
+      "description": {
+        "kind": "markdown",
+        "value": "Dialogs and the command palette.\n\n- Discothèque: `26px`\n- Folio: `12px`"
+      }
+    },
+    {
+      "name": "--rule",
+      "description": {
+        "kind": "markdown",
+        "value": "Dotted dividers between rows and fields (2px dotted). Decorative only.\n\n- Discothèque: Lights on `#d9c49a`, Lights off `#4a3020`\n- Folio: Light `#dde1e6`, Dark `#2c333c`"
+      }
+    },
+    {
+      "name": "--rust",
+      "description": {
+        "kind": "markdown",
+        "value": "Danger and errors: text on paper (5.2:1), deletions in diffs, stamps, links.\n\n- Discothèque: Lights on `#a8401a`, Lights off `#f0a27a`\n- Folio: Light `#b42318`, Dark `#f2877d`"
+      }
+    },
+    {
+      "name": "--rust-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Background of blocking problems and deleted text.\n\n- Discothèque: Lights on `#fbe6dc`, Lights off `#3b1a0e`\n- Folio: Light `#fdecea`, Dark `#3a1714`"
+      }
+    },
+    {
+      "name": "--selected-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "A soft selection fill.\n\n- Discothèque: Lights on `var(--mustard-soft)` → `#fff1c7`, Lights off `var(--mustard-soft)` → `#3a2a0c`\n- Folio: Light `var(--folio-accent-soft)` → `#e8f0fc`, Dark `var(--folio-accent-soft)` → `#17253b`"
+      }
+    },
+    {
+      "name": "--shadow-dialog",
+      "description": {
+        "kind": "markdown",
+        "value": "Command palette, popovers, side panels.\n\n- Discothèque: Lights on `8px 8px 0 #3b2416`, Lights off `8px 8px 0 #000000`\n- Folio: Light `0 16px 40px rgba(16, 24, 40, 0.18), 0 2px 6px rgba(16, 24, 40, 0.08)`, Dark `0 16px 40px rgba(0, 0, 0, 0.65)`"
+      }
+    },
+    {
+      "name": "--shadow-drag",
+      "description": {
+        "kind": "markdown",
+        "value": "Anything being dragged.\n\n- Discothèque: Lights on `10px 14px 0 rgba(59,36,22,0.35)`, Lights off `10px 14px 0 rgba(0,0,0,0.6)`\n- Folio: Light `0 12px 24px rgba(16, 24, 40, 0.18)`, Dark `0 12px 24px rgba(0, 0, 0, 0.6)`"
+      }
+    },
+    {
+      "name": "--shadow-highlight",
+      "description": {
+        "kind": "markdown",
+        "value": "A preview or field that just changed (new structure preview, toast).\n\n- Discothèque: `4px 4px 0 #e1a730`\n- Folio: Light `0 0 0 3px #e8f0fc`, Dark `0 0 0 3px #17253b`"
+      }
+    },
+    {
+      "name": "--shadow-lift",
+      "description": {
+        "kind": "markdown",
+        "value": "Hovered cards, selected nav item.\n\n- Discothèque: Lights on `4px 4px 0 #3b2416`, Lights off `4px 4px 0 #000000`\n- Folio: Light `0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04)`, Dark `0 1px 3px rgba(0, 0, 0, 0.5)`"
+      }
+    },
+    {
+      "name": "--shadow-press",
+      "description": {
+        "kind": "markdown",
+        "value": "Primary buttons at rest; collapses to 0 on press.\n\n- Discothèque: Lights on `3px 3px 0 #3b2416`, Lights off `3px 3px 0 #000000`\n- Folio: Light `0 1px 2px rgba(16, 24, 40, 0.05)`, Dark `0 1px 2px rgba(0, 0, 0, 0.4)`"
+      }
+    },
+    {
+      "name": "--space-1",
+      "description": {
+        "kind": "markdown",
+        "value": "Icon to label, avatar overlap step.\n\n- Discothèque: `4px`\n- Folio: `4px`"
+      }
+    },
+    {
+      "name": "--space-10",
+      "description": {
+        "kind": "markdown",
+        "value": "Between major page regions.\n\n- Discothèque: `40px`\n- Folio: `40px`"
+      }
+    },
+    {
+      "name": "--space-14",
+      "description": {
+        "kind": "markdown",
+        "value": "Above page titles on wide screens.\n\n- Discothèque: `56px`\n- Folio: `56px`"
+      }
+    },
+    {
+      "name": "--space-2",
+      "description": {
+        "kind": "markdown",
+        "value": "Chip gaps, button groups.\n\n- Discothèque: `8px`\n- Folio: `8px`"
+      }
+    },
+    {
+      "name": "--space-3",
+      "description": {
+        "kind": "markdown",
+        "value": "Row padding, field label to input.\n\n- Discothèque: `12px`\n- Folio: `12px`"
+      }
+    },
+    {
+      "name": "--space-4",
+      "description": {
+        "kind": "markdown",
+        "value": "Card padding, phone gutter.\n\n- Discothèque: `16px`\n- Folio: `16px`"
+      }
+    },
+    {
+      "name": "--space-5",
+      "description": {
+        "kind": "markdown",
+        "value": "Tile padding, list gaps.\n\n- Discothèque: `20px`\n- Folio: `20px`"
+      }
+    },
+    {
+      "name": "--space-6",
+      "description": {
+        "kind": "markdown",
+        "value": "Desktop gutter, between sections in a panel.\n\n- Discothèque: `24px`\n- Folio: `24px`"
+      }
+    },
+    {
+      "name": "--space-8",
+      "description": {
+        "kind": "markdown",
+        "value": "Main content padding.\n\n- Discothèque: `32px`\n- Folio: `32px`"
+      }
+    },
+    {
+      "name": "--spring-pop",
+      "description": {
+        "kind": "markdown",
+        "value": "Things you caused appearing: ticks, chips, stamps, the pill after publishing. A visible bounce. A spring as a CSS `linear()` curve; pair it with `--spring-pop-duration`.\n\n- Discothèque: `linear(…) (34 points)`\n- Folio: `linear(…) (26 points)`"
+      }
+    },
+    {
+      "name": "--spring-pop-duration",
+      "description": {
+        "kind": "markdown",
+        "value": "How long the pop spring takes to settle.\n\n- Discothèque: `550ms`\n- Folio: `417ms`"
+      }
+    },
+    {
+      "name": "--spring-settle",
+      "description": {
+        "kind": "markdown",
+        "value": "Things landing after a move: lifted rows, the flying title, a dialog. Bounces once. A spring as a CSS `linear()` curve; pair it with `--spring-settle-duration`.\n\n- Discothèque: `linear(…) (40 points)`\n- Folio: `linear(…) (23 points)`"
+      }
+    },
+    {
+      "name": "--spring-settle-duration",
+      "description": {
+        "kind": "markdown",
+        "value": "How long the settle spring takes to settle.\n\n- Discothèque: `650ms`\n- Folio: `367ms`"
+      }
+    },
+    {
+      "name": "--stripe-band",
+      "description": {
+        "kind": "markdown",
+        "value": "Height of each of the four rainbow stripes under the top bar.\n\n- Discothèque: `6px`\n- Folio: `0px`"
+      }
+    },
+    {
+      "name": "--success",
+      "description": {
+        "kind": "markdown",
+        "value": "Live status pill and success buttons. White text on it in light (6.4:1), paper text in dark.\n\n- Discothèque: Lights on `#56651f`, Lights off `#9db050`\n- Folio: Light `#18794e`, Dark `#5cc08f`"
+      }
+    },
+    {
+      "name": "--success-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Background of live pills and 'all caught up' notices.\n\n- Discothèque: Lights on `#e7edcf`, Lights off `#232b10`\n- Folio: Light `#e6f4ec`, Dark `#12301f`"
+      }
+    },
+    {
+      "name": "--teal",
+      "description": {
+        "kind": "markdown",
+        "value": "Scheduled and informational: 'goes out Nov 13', scheduled pills, info notes.\n\n- Discothèque: Lights on `#1f4b5a`, Lights off `#7fb3c4`\n- Folio: Light `#0b6e85`, Dark `#5ec2da`"
+      }
+    },
+    {
+      "name": "--teal-soft",
+      "description": {
+        "kind": "markdown",
+        "value": "Background of scheduled pills.\n\n- Discothèque: Lights on `#dcebef`, Lights off `#10262e`\n- Folio: Light `#e2f3f7`, Dark `#10292f`"
+      }
+    },
+    {
+      "name": "--ui-size",
+      "description": {
+        "kind": "markdown",
+        "value": "Default size of UI text.\n\n- Discothèque: `16px`\n- Folio: `14px`"
+      }
+    },
+    {
+      "name": "--warning-ink",
+      "description": {
+        "kind": "markdown",
+        "value": "Warning text on paper (4.8:1): suggestions, counters near their limit.\n\n- Discothèque: Lights on `#8f5c00`, Lights off `#e1a730`\n- Folio: Light `#8a5a00`, Dark `#e5b454`"
+      }
+    },
+    {
+      "name": "--travel",
+      "description": {
+        "kind": "markdown",
+        "value": "Reduced motion: 1 normally, 0 under reduced motion. Multiply distances, scales and turns by it, inside a calc().\n\n`1`, `0` under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--loop",
+      "description": {
+        "kind": "markdown",
+        "value": "Reduced motion: the iteration count for anything that repeats. `infinite` normally, `1` under reduced motion.\n\n`infinite`, `1` under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-cap",
+      "description": {
+        "kind": "markdown",
+        "value": "Reduced motion: the longest a fade or drawn line may last. Use `min(var(--duration-pop), var(--motion-cap))`.\n\n`100s`, `200ms` under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--switch-thumb",
+      "description": {
+        "kind": "markdown",
+        "value": "`switch` moment setting: the thumb's size.\n\nDiscothèque `20px`, Folio `16px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--switch-travel",
+      "description": {
+        "kind": "markdown",
+        "value": "`switch` moment setting: how far the thumb travels.\n\nDiscothèque `24px`, Folio `20px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--switch-stretch",
+      "description": {
+        "kind": "markdown",
+        "value": "`switch` moment setting: how much the thumb stretches while pressed.\n\nDiscothèque `6px`, Folio `4px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--toast-time",
+      "description": {
+        "kind": "markdown",
+        "value": "`toast` moment setting: how long the toast shows. Its timer bar is the clock.\n\n`5s`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--ticker-time",
+      "description": {
+        "kind": "markdown",
+        "value": "`ticker` moment setting: how long one pass of the track takes.\n\n`70s`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--progress",
+      "description": {
+        "kind": "markdown",
+        "value": "`develop` moment setting: the upload's progress, from 0 to 1.\n\n`0` to `1`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--hour",
+      "description": {
+        "kind": "markdown",
+        "value": "`wind` moment setting: where the hour hand lands.\n\n`270deg`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--x",
+      "description": {
+        "kind": "markdown",
+        "value": "`slide` moment: the indicator's left edge, set by `slide()`.\n\nset by `slide()`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--w",
+      "description": {
+        "kind": "markdown",
+        "value": "`slide` moment: the indicator's width, set by `slide()`.\n\nset by `slide()`. Set by moments.css."
+      }
+    }
+  ]
+}

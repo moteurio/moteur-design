@@ -1,0 +1,1356 @@
+/*
+ * Moments: every named motion in a Moteur app, keyed on data-moment, data-state and data-part.
+ * The contract, with the markup each moment expects, is docs/motion.md.
+ *
+ * Load it after looks.css: it reads the looks' motion tokens (springs as linear(), the pen).
+ * Discothèque is print you can touch (pop, thud, bounce once); Folio is ink that draws itself
+ * (no bounce, one flourish per moment), so Folio's rules follow each moment's own.
+ *
+ * Reduced motion runs on three variables instead of a blanket rule, so nothing is skipped:
+ * distances, scales and turns are multiplied by --travel, loops count --loop, and fades and
+ * drawn lines last min(<duration>, var(--motion-cap)). Timers and progress use none of them.
+ * Moments move things with transform; position moment elements with translate or inset.
+ */
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --travel: 1;
+  --loop: infinite;
+  --motion-cap: 100s;
+
+  /* Durations with the cap applied, for the rules below. Names starting --m- are internal. */
+  --m-snap: min(var(--duration-snap), var(--motion-cap));
+  --m-pop: min(var(--spring-pop-duration), var(--motion-cap));
+  --m-settle: min(var(--spring-settle-duration), var(--motion-cap));
+  --m-glide: min(var(--duration-glide), var(--motion-cap));
+  --m-drift: min(var(--duration-drift), var(--motion-cap));
+  --m-pen: min(var(--duration-pen), var(--motion-cap));
+
+  /* Per-look settings a component may override on its own element. */
+  --switch-thumb: 20px;
+  --switch-travel: 24px;
+  --switch-stretch: 6px;
+}
+:root[data-look='folio'] {
+  --switch-thumb: 16px;
+  --switch-travel: 20px;
+  --switch-stretch: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) {
+    --travel: 0;
+    --loop: 1;
+    --motion-cap: 200ms;
+  }
+}
+:root[data-motion='reduce'] {
+  --travel: 0;
+  --loop: 1;
+  --motion-cap: 200ms;
+}
+
+/* A hidden part stays hidden even when its own CSS sets display (a grid list with hidden on it
+   would otherwise sit under a flying title). */
+[data-moment][hidden]:not([hidden='until-found']),
+[data-moment] [hidden]:not([hidden='until-found']) {
+  display: none !important;
+}
+
+/* ── Shared keyframes ───────────────────────────────────────────────────────────────────────── */
+
+/* Arriving: from an offset (--m-x, --m-y), a scale (--m-s) and a turn (--m-r), all times
+   --travel, so under reduced motion only the fade is left. */
+@keyframes moteur-enter {
+  from {
+    opacity: var(--m-o, 0);
+    transform: translate(
+        calc(var(--m-x, 0px) * var(--travel)),
+        calc(var(--m-y, 0px) * var(--travel))
+      )
+      scale(calc(1 - (1 - var(--m-s, 1)) * var(--travel)))
+      rotate(calc(var(--m-r, 0deg) * var(--travel)));
+  }
+}
+@keyframes moteur-leave {
+  to {
+    opacity: 0;
+    transform: translate(
+        calc(var(--m-x, 0px) * var(--travel)),
+        calc(var(--m-y, 0px) * var(--travel))
+      )
+      scale(calc(1 - (1 - var(--m-s, 1)) * var(--travel)));
+  }
+}
+@keyframes moteur-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+/* A pen stroke on a pathLength="1" path. Hidden for its first frame so a round cap leaves no dot. */
+@keyframes moteur-draw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+/* Lines that draw themselves along x or y: a drawn line, so never multiplied by --travel. */
+/* stylelint-disable moteur/keyframes-travel -- a line drawing itself is not travel */
+@keyframes moteur-line-x {
+  from {
+    scale: 0 1;
+  }
+}
+@keyframes moteur-line-y {
+  from {
+    scale: 1 0;
+  }
+}
+/* stylelint-enable moteur/keyframes-travel */
+@keyframes moteur-shake {
+  20% {
+    translate: calc(-5px * var(--travel)) 0;
+  }
+  40% {
+    translate: calc(5px * var(--travel)) 0;
+  }
+  60% {
+    translate: calc(-4px * var(--travel)) 0;
+  }
+  80% {
+    translate: calc(3px * var(--travel)) 0;
+  }
+}
+@keyframes moteur-ping {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(calc(1 + 0.9 * var(--travel)));
+  }
+}
+@keyframes moteur-hide {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes moteur-show {
+  from {
+    visibility: hidden;
+  }
+}
+
+/* Every drawn line is a pathLength="1" path: one dash as long as the path. */
+[data-moment] [data-part='ink'] {
+  stroke-dasharray: 1;
+}
+
+/* stylelint-disable moteur/motion-tokens -- Each moment's own timings (a stamp lifts off after
+   1.8 s, the confetti falls for 1.5 s, the steps of a seal 60 ms apart) are its choreography, and
+   part of its contract in docs/motion.md the way token values are. Most are still capped with
+   --motion-cap or multiplied by --travel. Component CSS uses the tokens. */
+
+/* ── press · Button ─────────────────────────────────────────────────────────────────────────── */
+/* Every press is seen: it lands in 90 ms and lets go 90 ms later at the earliest, so a quick
+   click still shows. Discothèque sinks into its shadow (a button without one can set --press
+   lower); Folio sinks 1 px and darkens a shade. */
+
+[data-moment~='press'] {
+  transition:
+    translate calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle) 90ms,
+    box-shadow var(--m-settle) var(--spring-settle) 90ms,
+    filter var(--m-settle) ease 90ms;
+}
+[data-moment~='press']:is(:active, [data-pressed]):not(:disabled, [aria-disabled='true']) {
+  translate: calc(var(--press) * var(--travel)) calc(var(--press) * var(--travel));
+  transition:
+    translate 90ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 90ms cubic-bezier(0.2, 0, 0, 1),
+    filter 90ms cubic-bezier(0.2, 0, 0, 1);
+}
+:root:not([data-look='folio'])
+  [data-moment~='press']:is(:active, [data-pressed]):not(:disabled, [aria-disabled='true']) {
+  box-shadow: none;
+}
+:root[data-look='folio']
+  [data-moment~='press']:is(:active, [data-pressed]):not(:disabled, [aria-disabled='true']) {
+  translate: 0 calc(1px * var(--travel));
+  filter: brightness(0.92);
+}
+
+/* The busy cue, shared by every button that waits: Discothèque's stripes roll inside it,
+   Folio's line runs along its bottom edge. Under reduced motion both hold still. */
+:where([data-moment~='press'], [data-moment~='save'])[data-state='busy'] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+:is([data-moment~='press'], [data-moment~='save'])[data-state='busy']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(-45deg, var(--mustard) 0 8px, transparent 8px 16px);
+  background-size: 200% 100%;
+  animation: moteur-roll calc(600ms * var(--travel)) linear var(--loop);
+}
+:root[data-look='folio']
+  :is([data-moment~='press'], [data-moment~='save'])[data-state='busy']::before {
+  inset: auto auto 0 0;
+  width: 40%;
+  height: 2px;
+  background: currentColor;
+  translate: 75% 0;
+  animation: moteur-edge-run calc(1100ms * var(--travel)) var(--ease-pen) var(--loop);
+}
+@keyframes moteur-roll {
+  to {
+    background-position: -22.6px 0;
+  }
+}
+/* stylelint-disable-next-line moteur/keyframes-travel -- its duration is multiplied by --travel instead */
+@keyframes moteur-edge-run {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
+  }
+}
+
+/* ── switch · Switch ────────────────────────────────────────────────────────────────────────── */
+/* Pressed, the thumb stretches toward where it is going; let go, it lands with the pop spring.
+   Size and distance come from --switch-thumb, --switch-travel and --switch-stretch. */
+
+[data-moment~='switch'] [data-part='thumb'] {
+  width: var(--switch-thumb);
+  transition:
+    translate calc(var(--spring-pop-duration) * var(--travel)) var(--spring-pop),
+    width calc(var(--spring-pop-duration) * var(--travel)) var(--spring-pop);
+}
+:is([data-moment~='switch'][aria-checked='true'], [data-moment~='switch']:has(:checked))
+  [data-part='thumb'] {
+  translate: var(--switch-travel) 0;
+}
+[data-moment~='switch']:is(:active, [data-pressed]) [data-part='thumb'] {
+  width: calc(var(--switch-thumb) + var(--switch-stretch) * var(--travel));
+  transition-duration: calc(var(--duration-snap) * var(--travel));
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+:is([data-moment~='switch'][aria-checked='true'], [data-moment~='switch']:has(:checked)):is(
+    :active,
+    [data-pressed]
+  )
+  [data-part='thumb'] {
+  translate: calc(var(--switch-travel) - var(--switch-stretch) * var(--travel)) 0;
+}
+
+/* ── slide · Segmented, Tabs ────────────────────────────────────────────────────────────────── */
+/* The indicator sits where slide() puts it (--x, --w); slide() also plays the move. */
+
+:where([data-moment~='slide']) {
+  position: relative;
+}
+[data-moment~='slide'] [data-part='indicator'] {
+  position: absolute;
+  left: 0;
+  translate: var(--x, 0) 0;
+  width: var(--w, 0);
+  pointer-events: none;
+}
+
+/* ── field-error · TextField ────────────────────────────────────────────────────────────────── */
+/* On the box around the input. Discothèque shakes once; Folio draws a rust line under it. A
+   message marked data-part="message" (inside, or a sibling after it) drops in or rises. */
+
+:where([data-moment~='field-error']) {
+  position: relative;
+}
+[data-moment~='field-error'][data-invalid]:not([data-invalid='false']) {
+  animation: moteur-shake 360ms var(--ease-shake);
+}
+:is(
+  [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) [data-part='message'],
+  [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) ~ [data-part='message']
+) {
+  --m-y: -6px;
+  animation: moteur-enter var(--m-pop) var(--spring-pop) 140ms both;
+}
+:root[data-look='folio'] [data-moment~='field-error'][data-invalid] {
+  animation: none;
+}
+:root[data-look='folio'] [data-moment~='field-error']::after {
+  content: '';
+  position: absolute;
+  inset: auto 1px 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--rust);
+  transform-origin: left;
+  scale: 0 1;
+  pointer-events: none;
+}
+:root[data-look='folio']
+  [data-moment~='field-error'][data-invalid]:not([data-invalid='false'])::after {
+  scale: 1 1;
+  animation: moteur-line-x var(--m-pen) var(--ease-pen) both;
+}
+:root[data-look='folio']
+  :is(
+    [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) [data-part='message'],
+    [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) ~ [data-part='message']
+  ) {
+  --m-y: 4px;
+  animation: moteur-enter var(--m-settle) var(--spring-settle) 160ms both;
+}
+
+/* ── save · SaveButton ──────────────────────────────────────────────────────────────────────── */
+/* dirty: a dot pops in and pings once. busy: the busy cue (see press). done: the tick writes
+   itself. failed: Discothèque shakes, Folio draws a rust line along the bottom. data-shortcut
+   (set when ⌘S saved) flashes the press as if the button were clicked. */
+
+:where([data-moment~='save']) [data-part='dot'] {
+  display: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+:where([data-moment~='save'][data-state='dirty']) [data-part='dot'] {
+  display: inline-block;
+}
+[data-moment~='save'][data-state='dirty'] [data-part='dot'] {
+  --m-s: 0;
+  animation:
+    moteur-enter var(--m-pop) var(--spring-pop) both,
+    moteur-dot-ping calc(700ms * var(--travel)) ease-out 120ms;
+}
+@keyframes moteur-dot-ping {
+  from {
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  to {
+    box-shadow: 0 0 0 7px transparent;
+  }
+}
+[data-moment~='save'][data-state='done'] [data-part='ink'] {
+  animation: moteur-draw var(--m-pen) var(--ease-pen) 60ms both;
+}
+[data-moment~='save'][data-state='failed'] {
+  animation: moteur-shake 360ms var(--ease-shake);
+}
+:root[data-look='folio'] [data-moment~='save'][data-state='failed'] {
+  animation: none;
+}
+:where(:root[data-look='folio'] [data-moment~='save'][data-state='failed']) {
+  position: relative;
+}
+:root[data-look='folio'] [data-moment~='save'][data-state='failed']::before {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: var(--rust);
+  transform-origin: left;
+  pointer-events: none;
+  animation: moteur-line-x var(--m-pen) var(--ease-pen) both;
+}
+[data-moment~='save'][data-shortcut] {
+  animation:
+    moteur-press-in 90ms cubic-bezier(0.2, 0, 0, 1) forwards,
+    moteur-press-out var(--m-settle) var(--spring-settle) 150ms forwards;
+}
+:root[data-look='folio'] [data-moment~='save'][data-shortcut] {
+  animation-name: moteur-press-in-folio, moteur-press-out-folio;
+}
+@keyframes moteur-press-in {
+  to {
+    translate: calc(var(--press) * var(--travel)) calc(var(--press) * var(--travel));
+    box-shadow: 0 0 0 transparent;
+  }
+}
+@keyframes moteur-press-out {
+  from {
+    translate: calc(var(--press) * var(--travel)) calc(var(--press) * var(--travel));
+    box-shadow: 0 0 0 transparent;
+  }
+}
+@keyframes moteur-press-in-folio {
+  to {
+    translate: 0 calc(1px * var(--travel));
+    filter: brightness(0.92);
+  }
+}
+@keyframes moteur-press-out-folio {
+  from {
+    translate: 0 calc(1px * var(--travel));
+    filter: brightness(0.92);
+  }
+}
+
+/* ── copied · CopyButton ────────────────────────────────────────────────────────────────────── */
+/* The icon box stacks the copy glyph and the tick in one grid cell, centred, so the tick lands
+   exactly on the icon. done: the glyph gives way and the tick writes itself; a tag marked
+   data-part="tag" rises above the button and fades after a second. */
+
+:where([data-moment~='copied']) [data-part='icon'] {
+  display: inline-grid;
+  place-items: center;
+}
+[data-moment~='copied'] [data-part='icon'] > * {
+  grid-area: 1 / 1;
+  transition: opacity min(160ms, var(--motion-cap));
+}
+[data-moment~='copied'] [data-part='icon'] svg {
+  display: block;
+}
+[data-moment~='copied'] [data-part='icon'] > :has([data-part='ink']),
+[data-moment~='copied'][data-state='done'] [data-part='icon'] > :not(:has([data-part='ink'])) {
+  opacity: 0;
+}
+[data-moment~='copied'][data-state='done'] [data-part='icon'] > :has([data-part='ink']) {
+  opacity: 1;
+  transition-duration: min(120ms, var(--motion-cap));
+}
+[data-moment~='copied'][data-state='done'] [data-part='ink'] {
+  animation: moteur-draw var(--m-pen) var(--ease-pen) 40ms both;
+}
+[data-moment~='copied'] [data-part='tag'] {
+  opacity: 0;
+  pointer-events: none;
+}
+[data-moment~='copied'][data-state='done'] [data-part='tag'] {
+  --m-y: 6px;
+  animation:
+    moteur-enter var(--m-pop) var(--spring-pop),
+    moteur-tag-out min(200ms, var(--motion-cap)) linear 1100ms forwards;
+  opacity: 1;
+}
+@keyframes moteur-tag-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── counter · Count, Badge ─────────────────────────────────────────────────────────────────── */
+/* count() splits the number into digit columns; each column stacks its digits in one cell and
+   clips them, so a digit rolls out as the next rolls in. */
+
+[data-moment~='counter'] {
+  font-variant-numeric: tabular-nums;
+}
+:where([data-moment~='counter']) [data-part='digit'] {
+  display: inline-grid;
+  height: 1lh;
+  overflow: clip;
+  vertical-align: top;
+}
+[data-moment~='counter'] [data-part='digit'] > * {
+  grid-area: 1 / 1;
+}
+
+/* ── code-cells · CodeField ─────────────────────────────────────────────────────────────────── */
+/* Each cell holds its digit in a child element. Filled: the digit drops in (Folio: rises and the
+   cell takes the accent). done: the gaps close and the tick writes itself. failed: the cells
+   shake (Folio: their edges turn rust), then the digits leave right to left. */
+
+[data-moment~='code-cells'] [data-part='cell'] {
+  transition: border-color var(--m-pop);
+}
+[data-moment~='code-cells'] [data-part='cell'][data-filled] > * {
+  --m-y: var(--m-cell-y, -10px);
+  animation: moteur-enter var(--m-cell-time, var(--m-pop)) var(--m-cell-ease, var(--spring-pop))
+    both;
+}
+:root[data-look='folio'] [data-moment~='code-cells'] {
+  --m-cell-y: 4px;
+  --m-cell-time: var(--m-settle);
+  --m-cell-ease: var(--spring-settle);
+}
+:root[data-look='folio'] [data-moment~='code-cells'] [data-part='cell'][data-filled] {
+  border-color: var(--folio-accent);
+}
+:is(
+  [data-moment~='code-cells']:has(> [data-part='cell']),
+  [data-moment~='code-cells'] :has(> [data-part='cell'])
+) {
+  transition: gap calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle);
+}
+:is(
+  [data-moment~='code-cells'][data-state='done']:has(> [data-part='cell']),
+  [data-moment~='code-cells'][data-state='done'] :has(> [data-part='cell'])
+) {
+  gap: 3px;
+}
+[data-moment~='code-cells'][data-state='done'] [data-part='ink'] {
+  animation: moteur-draw var(--m-pen) var(--ease-pen) 80ms both;
+}
+:root:not([data-look='folio'])
+  :is(
+    [data-moment~='code-cells'][data-state='failed']:has(> [data-part='cell']),
+    [data-moment~='code-cells'][data-state='failed'] :has(> [data-part='cell'])
+  ) {
+  animation: moteur-shake 360ms var(--ease-shake);
+}
+/* The second selector matches only in Folio, to outrank its accent edge. */
+[data-moment~='code-cells'][data-state='failed'] [data-part='cell'],
+:root[data-look] [data-moment~='code-cells'][data-state='failed'] [data-part='cell'] {
+  border-color: var(--rust);
+}
+[data-moment~='code-cells'][data-state='failed'] [data-part='cell'] > * {
+  --m-y: 6px;
+  animation: moteur-leave min(140ms, var(--motion-cap)) ease calc(700ms + var(--m-i, 0) * 40ms)
+    forwards;
+}
+:root[data-look='folio'] [data-moment~='code-cells'][data-state='failed'] [data-part='cell'] > * {
+  --m-y: 0px;
+}
+[data-moment~='code-cells'] [data-part='cell']:nth-last-child(2) > * {
+  --m-i: 1;
+}
+[data-moment~='code-cells'] [data-part='cell']:nth-last-child(3) > * {
+  --m-i: 2;
+}
+[data-moment~='code-cells'] [data-part='cell']:nth-last-child(4) > * {
+  --m-i: 3;
+}
+[data-moment~='code-cells'] [data-part='cell']:nth-last-child(5) > * {
+  --m-i: 4;
+}
+[data-moment~='code-cells'] [data-part='cell']:nth-last-child(6) > * {
+  --m-i: 5;
+}
+[data-moment~='code-cells'] [data-part='cell']:nth-last-child(n + 7) > * {
+  --m-i: 6;
+}
+
+/* ── hold · Button intent="destroy" ─────────────────────────────────────────────────────────── */
+/* hold() grows the fill while the button is held and drains it if let go early. The fill sits
+   under the label: the button isolates, so a z-index of -1 still paints above its background. */
+
+:where([data-moment~='hold']) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+[data-moment~='hold'] [data-part='fill'] {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform-origin: left;
+  transform: scaleX(0);
+  /* stylelint-disable-next-line color-no-hex -- a darkening wash on any fill; no token is black in every theme */
+  background: color-mix(in srgb, #000 30%, transparent);
+  pointer-events: none;
+}
+
+/* ── toast · Toast ──────────────────────────────────────────────────────────────────────────── */
+/* Enters from below (Discothèque pops up 90 px; Folio settles 12 px). The timer bar is the
+   clock: it runs --toast-time, pauses while the toast is hovered or focused, and toastTimer()
+   resolves when it ends. It runs the same under reduced motion. data-state="leaving" exits,
+   quicker than it came and without a spring. */
+
+[data-moment~='toast'] {
+  --m-y: 90px;
+  animation: moteur-enter var(--m-pop) var(--spring-pop) both;
+}
+:root[data-look='folio'] [data-moment~='toast'] {
+  --m-y: 12px;
+  animation: moteur-enter var(--m-settle) var(--spring-settle) both;
+}
+/* Leaving rules start with :root so they outrank Folio's arrival rules. */
+:root [data-moment~='toast'][data-state='leaving'] {
+  --m-y: 60px;
+  animation: moteur-leave min(180ms, var(--motion-cap)) var(--ease-glide) forwards;
+}
+:root[data-look='folio'] [data-moment~='toast'][data-state='leaving'] {
+  --m-y: 8px;
+  animation: moteur-leave min(140ms, var(--motion-cap)) var(--ease-glide) forwards;
+}
+[data-moment~='toast'] [data-part='timer'] {
+  transform-origin: left;
+  animation: moteur-timer var(--toast-time, 5s) linear forwards;
+}
+[data-moment~='toast']:is(:hover, :focus-within) [data-part='timer'] {
+  animation-play-state: paused;
+}
+/* stylelint-disable-next-line moteur/keyframes-travel -- a timer, which runs as usual under reduced motion */
+@keyframes moteur-timer {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ── stamp and thud · Stamp (Discothèque) ───────────────────────────────────────────────────── */
+/* The stamp slams down from big and turned, rests at -10°, and lifts off after 1.8 s. The
+   container it lands in (data-moment="thud") takes the hit: a 2 px jolt as the stamp lands. */
+
+[data-moment~='stamp'] {
+  rotate: -10deg;
+  animation:
+    moteur-stamp var(--m-pop) var(--spring-pop) both,
+    moteur-stamp-lift min(400ms, var(--motion-cap)) ease 1800ms forwards;
+  pointer-events: none;
+}
+@keyframes moteur-stamp {
+  from {
+    opacity: 0;
+    transform: scale(calc(1 + 1.4 * var(--travel))) rotate(calc(-14deg * var(--travel)));
+  }
+}
+@keyframes moteur-stamp-lift {
+  to {
+    opacity: 0;
+    transform: scale(calc(1 - 0.04 * var(--travel)));
+  }
+}
+[data-moment~='thud']:is([data-state='done'], :has([data-moment~='stamp'])) {
+  animation: moteur-thud 260ms ease-out 110ms;
+}
+@keyframes moteur-thud {
+  35% {
+    transform: translateY(calc(2px * var(--travel)));
+  }
+}
+
+/* ── seal · StatusPill ──────────────────────────────────────────────────────────────────────── */
+/* done (and failed, for "changes asked"): the fill sweeps in from the left, the ink writes
+   itself in order (a ring, then its tick), eight rays spark once, an edge line draws down the
+   card and a badge pops onto an avatar. Every part is optional. */
+
+[data-moment~='seal'] [data-part='fill'] {
+  transform-origin: left;
+  scale: 0 1;
+}
+[data-moment~='seal']:is([data-state='done'], [data-state='failed']) [data-part='fill'] {
+  scale: 1 1;
+  animation: moteur-line-x var(--m-pen) var(--ease-pen) both;
+}
+[data-moment~='seal']:not([data-state='done']) [data-part='ink'] {
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+[data-moment~='seal'] :is([data-part='edge'], [data-part='rays'], [data-part='badge']) {
+  opacity: 0;
+}
+[data-moment~='seal']:is([data-state='done'], [data-state='failed']) [data-part='edge'] {
+  opacity: 1;
+  transform-origin: top;
+  animation: moteur-line-y var(--m-pen) var(--ease-pen) 60ms both;
+}
+[data-moment~='seal']:is([data-state='done'], [data-state='failed']) [data-part='label'] {
+  animation: moteur-label var(--m-pen) var(--ease-pen) both;
+}
+@keyframes moteur-label {
+  from {
+    opacity: 0.4;
+  }
+}
+[data-moment~='seal'][data-state='done'] [data-part='badge'] {
+  --m-s: 0.3;
+  opacity: 1;
+  animation: moteur-enter var(--m-pop) var(--spring-pop) 260ms both;
+}
+
+/* Ink in a seal or a milestone writes in order: the first line at 120 ms, then 300 ms apart. */
+:is([data-moment~='seal'][data-state='done'], [data-moment~='milestone']) [data-part='ink'] {
+  animation: moteur-draw var(--m-pen) var(--ease-pen) 120ms both;
+}
+:is([data-moment~='seal'][data-state='done'], [data-moment~='milestone'])
+  [data-part='ink']:nth-child(2) {
+  animation-delay: 420ms;
+}
+:is([data-moment~='seal'][data-state='done'], [data-moment~='milestone'])
+  [data-part='ink']:nth-child(n + 3) {
+  animation-delay: 720ms;
+}
+:is([data-moment~='seal'], [data-moment~='milestone']) [data-part='rays'] {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+:is([data-moment~='seal'][data-state='done'], [data-moment~='milestone']) [data-part='rays'] {
+  animation: moteur-rays min(620ms, var(--motion-cap)) cubic-bezier(0.2, 0.6, 0.3, 1) 780ms both;
+}
+@keyframes moteur-rays {
+  from {
+    opacity: 0;
+    transform: scale(calc(1 - 0.3 * var(--travel)));
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(calc(1 + 0.25 * var(--travel)));
+  }
+}
+
+/* ── change-mark · ChangeMark ───────────────────────────────────────────────────────────────── */
+/* Something someone else just changed: a bar draws down the edge, a highlighter sweeps the new
+   words, and both fade. Runs when the mark is added to the page. */
+
+[data-moment~='change-mark'] [data-part='bar'] {
+  transform-origin: top;
+  animation:
+    moteur-line-y var(--m-pen) var(--ease-pen) both,
+    moteur-mark-fade min(3000ms, var(--motion-cap)) var(--ease-drift) 1400ms forwards;
+}
+[data-moment~='change-mark'] [data-part='highlight'] {
+  transform-origin: left;
+  animation:
+    moteur-line-x var(--m-pen) var(--ease-pen) 120ms both,
+    moteur-mark-fade min(3000ms, var(--motion-cap)) var(--ease-drift) 1520ms forwards;
+}
+:root:not([data-look='folio']) [data-moment~='change-mark'] [data-part='highlight'] {
+  rotate: -1deg;
+}
+@keyframes moteur-mark-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── milestone · Celebration ────────────────────────────────────────────────────────────────── */
+/* First publish and other firsts. The card drops in (Discothèque: from 24 px above, tilted a
+   degree; Folio: settles 10 px), its seal writes itself, and one burst follows: ten strips of
+   colour fall once behind it (Discothèque) or eight rays spark (Folio). data-state="leaving"
+   fades it. Under reduced motion the strips are simply there, scattered, and fade with it. */
+
+[data-moment~='milestone'] [data-part='card'] {
+  --m-y: -24px;
+  rotate: -1deg;
+  animation: moteur-enter var(--m-pop) var(--spring-pop) both;
+}
+:root[data-look='folio'] [data-moment~='milestone'] [data-part='card'] {
+  --m-y: -10px;
+  rotate: none;
+  animation: moteur-enter var(--m-settle) var(--spring-settle) both;
+}
+:root
+  [data-moment~='milestone'][data-state='leaving']
+  :is([data-part='card'], [data-part='confetti']) {
+  animation: moteur-mark-fade min(260ms, var(--motion-cap)) linear forwards;
+}
+:root[data-look='folio'] [data-moment~='milestone'] [data-part='confetti'],
+:root:not([data-look='folio']) [data-moment~='milestone'] [data-part='rays'] {
+  display: none;
+}
+[data-moment~='milestone'] [data-part='confetti'] {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  container-type: size;
+}
+[data-moment~='milestone'] [data-part='confetti'] > * {
+  --m-d: -12;
+  --m-f: 130;
+  position: absolute;
+  top: -24px;
+  left: calc((var(--m-n, 0) + 0.5) * 10% + var(--m-nudge, 8px));
+  width: 9px;
+  height: 22px;
+  border-radius: 3px;
+  opacity: 0;
+  background: var(--m-c, var(--rust));
+  animation: moteur-confetti calc(1500ms + var(--m-k, 0) * 160ms) cubic-bezier(0.3, 0, 0.6, 1)
+    calc(120ms + var(--m-j, 0) * 70ms) both;
+}
+/* stylelint-disable-next-line moteur/keyframes-travel -- reduced motion gives the strips a still pose (below) */
+@keyframes moteur-confetti {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  80% {
+    opacity: 1;
+    transform: translate(calc(var(--m-d) * 1px), 60cqh) rotate(calc(var(--m-d) * 9deg));
+  }
+  to {
+    opacity: 0;
+    transform: translate(calc(var(--m-d) * 1.3px), calc(100cqh + 30px))
+      rotate(calc(var(--m-d) * 12deg));
+  }
+}
+/* Ten strips, each with its own column, drift, fall time and colour. */
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(2) {
+  --m-n: 1;
+  --m-d: 19;
+  --m-f: 160;
+  --m-k: 1;
+  --m-j: 1;
+  --m-nudge: -8px;
+  --m-c: var(--orange);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(3) {
+  --m-n: 2;
+  --m-d: -26;
+  --m-f: 190;
+  --m-k: 2;
+  --m-j: 2;
+  --m-c: var(--mustard);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(4) {
+  --m-n: 3;
+  --m-d: 33;
+  --m-k: 3;
+  --m-j: 3;
+  --m-nudge: -8px;
+  --m-c: var(--avocado);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(5) {
+  --m-n: 4;
+  --m-d: -16;
+  --m-f: 160;
+  --m-j: 4;
+  --m-c: var(--teal);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(6) {
+  --m-n: 5;
+  --m-d: 23;
+  --m-f: 190;
+  --m-k: 1;
+  --m-nudge: -8px;
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(7) {
+  --m-n: 6;
+  --m-d: -30;
+  --m-k: 2;
+  --m-j: 1;
+  --m-c: var(--orange);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(8) {
+  --m-n: 7;
+  --m-d: 13;
+  --m-f: 160;
+  --m-k: 3;
+  --m-j: 2;
+  --m-nudge: -8px;
+  --m-c: var(--mustard);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(9) {
+  --m-n: 8;
+  --m-d: -20;
+  --m-f: 190;
+  --m-j: 3;
+  --m-c: var(--avocado);
+}
+[data-moment~='milestone'] [data-part='confetti'] > :nth-child(10) {
+  --m-n: 9;
+  --m-d: 27;
+  --m-k: 1;
+  --m-j: 4;
+  --m-nudge: -8px;
+  --m-c: var(--teal);
+}
+
+/* ── arrival · PresenceStack ────────────────────────────────────────────────────────────────── */
+/* Someone joins: their avatar slides into the stack, unhurried, so it never looks like it came
+   from your click. Discothèque: its ring pings three times. Folio: the ring draws itself once
+   around the avatar and stays. */
+
+[data-moment~='arrival'] {
+  --m-x: 18px;
+  animation: moteur-enter var(--m-drift) var(--ease-glide) both;
+}
+[data-moment~='arrival'] [data-part='ring'] {
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  opacity: 0;
+  animation: moteur-ping 900ms cubic-bezier(0.2, 0.6, 0.3, 1) calc(var(--duration-drift) * 0.6) 3
+    both;
+}
+:root[data-look='folio'] [data-moment~='arrival'] [data-part='ring'] {
+  opacity: 1;
+  animation: none;
+}
+:root[data-look='folio'] [data-moment~='arrival'] [data-part='ink'] {
+  animation: moteur-draw min(700ms, var(--motion-cap)) var(--ease-pen)
+    calc(var(--duration-drift) * 0.5) both;
+}
+
+/* ── curtain · Sign-in page ─────────────────────────────────────────────────────────────────── */
+/* data-state="done" when signed in. Discothèque: five bands rise from the bottom one after
+   another, cover the card, and lift away on the Studio. Folio: the card steps back and the
+   Studio (data-part="view") rises in. */
+
+[data-moment~='curtain'] [data-part='bands'] {
+  display: none;
+}
+:root:not([data-look='folio']) [data-moment~='curtain'][data-state='done'] [data-part='bands'] {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  pointer-events: none;
+  container-type: size;
+}
+[data-moment~='curtain'][data-state='done'] [data-part='bands'] > * {
+  --m-i: 0;
+  transform-origin: bottom;
+  animation:
+    moteur-band-in min(300ms, var(--motion-cap)) var(--ease-glide) calc((4 - var(--m-i)) * 45ms)
+      both,
+    moteur-band-out min(420ms, var(--motion-cap)) var(--ease-glide)
+      calc(560ms + (4 - var(--m-i)) * 45ms) forwards;
+}
+[data-moment~='curtain'] [data-part='bands'] > :nth-child(1) {
+  background: var(--rust);
+}
+[data-moment~='curtain'] [data-part='bands'] > :nth-child(2) {
+  --m-i: 1;
+  background: var(--orange);
+}
+[data-moment~='curtain'] [data-part='bands'] > :nth-child(3) {
+  --m-i: 2;
+  background: var(--mustard);
+}
+[data-moment~='curtain'] [data-part='bands'] > :nth-child(4) {
+  --m-i: 3;
+  background: var(--avocado);
+}
+[data-moment~='curtain'] [data-part='bands'] > :nth-child(5) {
+  --m-i: 4;
+  background: var(--teal);
+}
+@keyframes moteur-band-in {
+  from {
+    transform: scaleY(calc(1 - var(--travel)));
+  }
+}
+/* Lifting away is travel; under reduced motion the bands fade instead (opacity is --travel). */
+@keyframes moteur-band-out {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(calc(-100cqh * var(--travel)));
+    opacity: var(--travel);
+  }
+}
+:root:not([data-look='folio']) [data-moment~='curtain'][data-state='done'] [data-part='card'] {
+  animation: moteur-hide 0s 560ms forwards;
+}
+:root:not([data-look='folio']) [data-moment~='curtain'][data-state='done'] [data-part='view'] {
+  animation: moteur-show 0s 560ms backwards;
+}
+:root[data-look='folio'] [data-moment~='curtain'][data-state='done'] [data-part='card'] {
+  --m-s: 0.98;
+  animation: moteur-leave min(200ms, var(--motion-cap)) ease-in forwards;
+}
+:root[data-look='folio'] [data-moment~='curtain'][data-state='done'] [data-part='view'] {
+  --m-y: 8px;
+  animation: moteur-enter var(--m-settle) var(--spring-settle) 200ms both;
+}
+
+/* ── develop · Upload tile ──────────────────────────────────────────────────────────────────── */
+/* The picture develops with the upload: set --progress (0 to 1) as it goes. Discothèque: from a
+   warm blur to sharp colour, then a flash; Folio: from grey to colour along a hairline, then a
+   tick in the corner. This is progress, so it runs the same under reduced motion. */
+
+[data-moment~='develop'] {
+  animation: moteur-fade-in min(200ms, var(--motion-cap)) both;
+}
+[data-moment~='develop'][data-state='done'] {
+  --progress: 1;
+}
+[data-moment~='develop'] [data-part='image'] {
+  filter: blur(calc(7px * (1 - var(--progress, 1)))) sepia(calc(0.85 * (1 - var(--progress, 1))))
+    saturate(calc(0.6 + 0.4 * var(--progress, 1)))
+    brightness(calc(1.18 - 0.18 * var(--progress, 1)));
+  transition: filter 200ms linear;
+}
+:root[data-look='folio'] [data-moment~='develop'] [data-part='image'] {
+  filter: grayscale(calc(1 - var(--progress, 1))) opacity(calc(0.55 + 0.45 * var(--progress, 1)));
+}
+[data-moment~='develop'] [data-part='progress'] {
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
+  transition: transform 200ms linear;
+}
+[data-moment~='develop'][data-state='done'] [data-part='progress'] {
+  animation: moteur-mark-fade min(300ms, var(--motion-cap)) forwards;
+}
+:root:not([data-look='folio']) [data-moment~='develop'][data-state='done'] [data-part='image'] {
+  animation: moteur-develop-flash min(420ms, var(--motion-cap)) ease-out;
+}
+@keyframes moteur-develop-flash {
+  from {
+    filter: brightness(1.35);
+  }
+  to {
+    filter: brightness(1);
+  }
+}
+[data-moment~='develop'] [data-part='badge'] {
+  opacity: 0;
+}
+[data-moment~='develop'][data-state='done'] [data-part='badge'] {
+  opacity: 1;
+  animation: moteur-fade-in min(160ms, var(--motion-cap)) both;
+}
+[data-moment~='develop'][data-state='done'] [data-part='ink'] {
+  animation: moteur-draw var(--m-pen) var(--ease-pen) 60ms both;
+}
+
+/* ── pen · Suggestion diff ──────────────────────────────────────────────────────────────────── */
+/* The suggestion rises in; a line strikes through the old words (data-part="del"), then the new
+   words (data-part="ins") write themselves in behind it, like a proofreader's pen. done
+   (accepted): the struck words fold away and the new ones settle into plain ink. */
+
+[data-moment~='pen'] {
+  --m-y: 4px;
+  animation: moteur-enter var(--m-glide) var(--ease-glide) both;
+}
+:where([data-moment~='pen']) [data-part='del'] {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: bottom;
+  overflow: clip;
+  interpolate-size: allow-keywords;
+}
+[data-moment~='pen'] [data-part='del']::after {
+  content: '';
+  position: absolute;
+  inset: 55% 0 auto;
+  height: 2px;
+  background: currentColor;
+  transform-origin: left;
+  pointer-events: none;
+  animation: moteur-line-x var(--m-pen) var(--ease-pen) 260ms both;
+}
+[data-moment~='pen'] [data-part='ins'] {
+  animation: moteur-write min(calc(var(--duration-pen) * 1.6), var(--motion-cap))
+    cubic-bezier(0.4, 0, 0.3, 1) calc(260ms + var(--duration-pen) * 0.7) both;
+}
+@keyframes moteur-write {
+  from {
+    clip-path: inset(0 calc(100% * var(--travel)) 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0);
+    opacity: 1;
+  }
+}
+[data-moment~='pen'] [data-part='del'] {
+  transition:
+    width calc(var(--duration-glide) * var(--travel)) var(--ease-glide),
+    margin calc(var(--duration-glide) * var(--travel)) var(--ease-glide),
+    opacity var(--m-glide) var(--ease-glide);
+}
+[data-moment~='pen'][data-state='done'] [data-part='del'] {
+  width: 0;
+  margin-inline-end: -4px;
+  opacity: 0;
+}
+[data-moment~='pen'] [data-part='ins'] {
+  transition:
+    border-color min(500ms, var(--motion-cap)) ease-out,
+    text-decoration-color min(500ms, var(--motion-cap)) ease-out,
+    background-size min(500ms, var(--motion-cap)) ease-out;
+}
+[data-moment~='pen'][data-state='done'] [data-part='ins'] {
+  border-color: transparent;
+  text-decoration-color: transparent;
+  background-size: 100% 0%;
+}
+
+/* ── wind · Schedule button ─────────────────────────────────────────────────────────────────── */
+/* done: the minute hand winds two turns and the hour hand three quarters, landing on --hour
+   (the time picked, 270deg by default). Discothèque's hands spring into place; Folio's settle. */
+
+[data-moment~='wind'] :is([data-part='minute'], [data-part='hour']) {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+[data-moment~='wind'][data-state='done'] [data-part='minute'] {
+  animation: moteur-wind-minute min(760ms, var(--motion-cap)) cubic-bezier(0.3, 1.3, 0.5, 1) both;
+}
+[data-moment~='wind'][data-state='done'] [data-part='hour'] {
+  rotate: var(--hour, 270deg);
+  animation: moteur-wind-hour min(760ms, var(--motion-cap)) cubic-bezier(0.3, 1.3, 0.5, 1) both;
+}
+:root[data-look='folio']
+  [data-moment~='wind'][data-state='done']
+  :is([data-part='minute'], [data-part='hour']) {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes moteur-wind-minute {
+  from {
+    rotate: calc(-720deg * var(--travel));
+  }
+}
+@keyframes moteur-wind-hour {
+  from {
+    rotate: calc(var(--hour, 270deg) - 270deg * var(--travel));
+  }
+}
+
+/* ── unfold · Drawer, Disclosure ────────────────────────────────────────────────────────────── */
+/* data-state="open": height and opacity, and the children follow 30 ms apart (Folio: 20 ms; the
+   first eight). Discothèque's height lands with a spring. Closing is a third quicker. With
+   @starting-style, a drawer that is added already open unfolds too. */
+
+[data-moment~='unfold'] {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  transition:
+    height calc(var(--duration-glide) * 0.66 * var(--travel)) var(--ease-glide),
+    opacity min(calc(var(--duration-glide) * 0.66), var(--motion-cap)) var(--ease-glide),
+    visibility calc(var(--duration-glide) * 0.66);
+}
+[data-moment~='unfold']:not([data-state='open']) {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+[data-moment~='unfold'][data-state='open'] {
+  transition:
+    height calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
+    opacity var(--m-glide) var(--ease-glide),
+    visibility 0s;
+}
+:root[data-look='folio'] [data-moment~='unfold'][data-state='open'] {
+  transition:
+    height calc(var(--duration-glide) * var(--travel)) var(--ease-glide),
+    opacity var(--m-glide) var(--ease-glide),
+    visibility 0s;
+}
+[data-moment~='unfold'] > * {
+  transition:
+    opacity var(--m-glide) var(--ease-glide),
+    transform calc(var(--duration-glide) * var(--travel)) var(--ease-glide);
+}
+[data-moment~='unfold']:not([data-state='open']) > * {
+  opacity: 0;
+  transform: translateY(calc(-8px * var(--travel)));
+}
+[data-moment~='unfold'][data-state='open'] > * {
+  transition-delay: calc(60ms + var(--m-i, 7) * var(--m-stagger, 30ms));
+}
+:root[data-look='folio'] [data-moment~='unfold'] {
+  --m-stagger: 20ms;
+}
+[data-moment~='unfold'] > :nth-child(1) {
+  --m-i: 0;
+}
+[data-moment~='unfold'] > :nth-child(2) {
+  --m-i: 1;
+}
+[data-moment~='unfold'] > :nth-child(3) {
+  --m-i: 2;
+}
+[data-moment~='unfold'] > :nth-child(4) {
+  --m-i: 3;
+}
+[data-moment~='unfold'] > :nth-child(5) {
+  --m-i: 4;
+}
+[data-moment~='unfold'] > :nth-child(6) {
+  --m-i: 5;
+}
+[data-moment~='unfold'] > :nth-child(7) {
+  --m-i: 6;
+}
+@starting-style {
+  [data-moment~='unfold'][data-state='open'] {
+    height: 0;
+    opacity: 0;
+  }
+  [data-moment~='unfold'][data-state='open'] > * {
+    opacity: 0;
+    transform: translateY(calc(-8px * var(--travel)));
+  }
+}
+
+/* ── dialog · Dialog, Popover, Menu ─────────────────────────────────────────────────────────── */
+/* Discothèque rises 16 px and lands with the pop spring, its hard shadow growing under it as it
+   touches down; Folio rises 8 px from 98% and settles. The backdrop fades: a <dialog>'s
+   ::backdrop, or an element marked data-part="backdrop" next to the panel. data-state="leaving"
+   closes it, quicker and without rising. */
+
+[data-moment~='dialog'] {
+  --m-y: 16px;
+  animation:
+    moteur-enter var(--m-pop) var(--spring-pop) both,
+    moteur-shadow-in min(260ms, var(--motion-cap)) ease-out 90ms both;
+}
+@keyframes moteur-shadow-in {
+  from {
+    box-shadow: 0 0 0 transparent;
+  }
+}
+:root[data-look='folio'] [data-moment~='dialog'] {
+  --m-y: 8px;
+  --m-s: 0.98;
+  animation: moteur-enter var(--m-settle) var(--spring-settle) both;
+}
+[data-moment~='dialog']::backdrop,
+[data-moment~='dialog'] ~ [data-part='backdrop'],
+[data-part='backdrop']:has(~ [data-moment~='dialog']) {
+  animation: moteur-fade-in var(--m-glide) var(--ease-glide) both;
+}
+:root [data-moment~='dialog'][data-state='leaving'] {
+  --m-y: 4px;
+  --m-s: 1;
+  animation: moteur-leave min(160ms, var(--motion-cap)) ease-in forwards;
+}
+[data-moment~='dialog'][data-state='leaving']::backdrop,
+[data-moment~='dialog'][data-state='leaving'] ~ [data-part='backdrop'],
+[data-part='backdrop']:has(~ [data-moment~='dialog'][data-state='leaving']) {
+  animation: moteur-mark-fade min(160ms, var(--motion-cap)) linear forwards;
+}
+
+/* ── lift · Sortable lists ──────────────────────────────────────────────────────────────────── */
+/* data-state="lifted": the row rises and tilts (Discothèque) or lifts 1.5% with a soft shadow
+   (Folio). While lifted it follows the pointer through transform without lag; the other rows
+   glide out of its way, and on drop it lands with the settle spring. */
+
+[data-moment~='lift'] {
+  transition:
+    transform calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
+    scale calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
+    rotate calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
+    box-shadow var(--m-settle) var(--spring-settle);
+}
+[data-moment~='lift'][data-state='lifted'] {
+  z-index: 1;
+  scale: calc(1 + 0.02 * var(--travel));
+  rotate: calc(-1.5deg * var(--travel));
+  box-shadow: var(--shadow-drag);
+  transition:
+    scale calc(var(--duration-snap) * var(--travel)) var(--ease-spring),
+    rotate calc(var(--duration-snap) * var(--travel)) var(--ease-spring),
+    box-shadow var(--m-snap) var(--ease-spring);
+}
+:root[data-look='folio'] [data-moment~='lift'][data-state='lifted'] {
+  scale: calc(1 + 0.015 * var(--travel));
+  rotate: none;
+  box-shadow: var(--folio-shadow-l);
+}
+
+/* ── wait · Skeleton ────────────────────────────────────────────────────────────────────────── */
+/* Nothing for 200 ms, so a fast load never flashes a skeleton. Then the bones (data-part="bone")
+   fade in with a slow, soft sweep that holds still under reduced motion. */
+
+[data-moment~='wait'] {
+  animation: moteur-fade-in min(150ms, var(--motion-cap)) linear 200ms both;
+}
+[data-moment~='wait'] [data-part='bone'] {
+  background: linear-gradient(
+    100deg,
+    var(--paper-sunk) 0 42%,
+    color-mix(in srgb, var(--paper-tint) 70%, var(--paper-sunk)) 50%,
+    var(--paper-sunk) 58% 100%
+  );
+  background-size: 300% 100%;
+  animation: moteur-shimmer calc(2200ms * var(--travel)) linear var(--loop);
+}
+@keyframes moteur-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* ── lights · Theme switch ──────────────────────────────────────────────────────────────────── */
+/* switchLights() sets data-lights on <html> for the length of its View Transition, so the
+   browser's own cross-fade steps aside only for it. */
+
+:root[data-lights]::view-transition-old(root),
+:root[data-lights]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ── ticker · LiveBand ──────────────────────────────────────────────────────────────────────── */
+/* The track scrolls for --ticker-time and stops while the element holding it is hovered or
+   focused, or with data-state="paused".
+   Under reduced motion it starts paused; data-state="running" plays it (a Play button). The
+   live dot pulses while it runs. Give the track two copies of the items, side by side. */
+
+[data-moment~='ticker'] [data-part='track'] {
+  animation: moteur-ticker var(--ticker-time, 70s) linear infinite;
+}
+[data-moment~='ticker'] [data-part='dot'] {
+  animation: moteur-live calc(1400ms * var(--travel)) ease-in-out var(--loop);
+}
+/* Hover and focus pause it only on the element holding the track, so a Play button beside it
+   starts the crawl at once. */
+[data-moment~='ticker'][data-state='paused'] :is([data-part='track'], [data-part='dot']),
+[data-moment~='ticker']:is(:hover, :focus-within) > [data-part='track'],
+[data-moment~='ticker'] :is(:hover, :focus-within) > [data-part='track'] {
+  animation-play-state: paused;
+}
+/* stylelint-disable-next-line moteur/keyframes-travel -- the ticker starts paused under reduced motion */
+@keyframes moteur-ticker {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes moteur-live {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* stylelint-enable moteur/motion-tokens */
+
+/* ── Reduced motion, where a moment ends somewhere else ─────────────────────────────────────── */
+/* Written twice: once for the system setting, once for data-motion="reduce". */
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full'])
+    [data-moment~='ticker']:not([data-state='running'])
+    [data-part='track'] {
+    animation-play-state: paused;
+  }
+  :root:not([data-motion='full']) [data-moment~='arrival'] [data-part='ring'] {
+    opacity: 0.9;
+    animation: moteur-fade-in var(--motion-cap) calc(var(--duration-drift) * 0.6) both;
+  }
+  :root:not([data-motion='full']) [data-moment~='milestone'] [data-part='confetti'] > * {
+    opacity: 1;
+    transform: translate(calc(var(--m-d) * 1px), calc(var(--m-f) * 1px))
+      rotate(calc(var(--m-d) * 3deg));
+    animation: moteur-fade-in var(--motion-cap) both;
+  }
+}
+:root[data-motion='reduce']
+  [data-moment~='ticker']:not([data-state='running'])
+  [data-part='track'] {
+  animation-play-state: paused;
+}
+:root[data-motion='reduce'] [data-moment~='arrival'] [data-part='ring'] {
+  opacity: 0.9;
+  animation: moteur-fade-in var(--motion-cap) calc(var(--duration-drift) * 0.6) both;
+}
+:root[data-motion='reduce'] [data-moment~='milestone'] [data-part='confetti'] > * {
+  opacity: 1;
+  transform: translate(calc(var(--m-d) * 1px), calc(var(--m-f) * 1px))
+    rotate(calc(var(--m-d) * 3deg));
+  animation: moteur-fade-in var(--motion-cap) both;
+}
