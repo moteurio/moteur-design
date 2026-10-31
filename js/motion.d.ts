@@ -31,6 +31,12 @@ export declare function play(
 /** Moves a slide indicator to the target option (sets --x and --w) and plays the move. */
 export declare function slide(indicator: HTMLElement, target: Element): Motion;
 
+/**
+ * Marks something you just changed with the flash moment (adds data-moment="flash"), or plays the
+ * flash again if it's already marked. Resolves when the colour has faded.
+ */
+export declare function flash(el: HTMLElement): Motion;
+
 /** Rolls a counter to `value`: only the digits that change roll. */
 export declare function count(el: HTMLElement, value: number | string): Motion;
 

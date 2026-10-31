@@ -1,6 +1,7 @@
 // Reduced motion keeps its promise: nothing is skipped and nothing ends hidden. Every moment in
 // fixture/ plays at once, in both looks, with the system asking for reduced motion and not, and
-// then each moment's probes (what it leaves on screen) must be visible. Run: pnpm test.
+// then each moment's probes (what it leaves on screen) must be visible. A flash must be seen
+// every time, reduced or not. Run: pnpm test.
 //
 // Uses the Chromium that playwright-core expects; if it's missing: pnpm exec playwright-core
 // install chromium.
@@ -20,6 +21,7 @@ const PROBES = {
   counter: ['[data-part="digit"]'],
   'code-cells': ['[data-part="cell"]'],
   hold: ['[data-moment~="hold"]'],
+  flash: ['[data-moment~="flash"]'],
   toast: ['.entry'],
   stamp: ['[data-moment~="thud"]'],
   seal: ['[data-part="fill"]', '[data-part="label"]', '[data-part="ink"]', '[data-part="badge"]'],
@@ -104,6 +106,7 @@ async function run(look, reducedMotion) {
           missing,
           travel: getComputedStyle(document.documentElement).getPropertyValue('--travel').trim(),
           toastMs: +document.querySelector('[data-name="toast"] .stage').dataset.lastToast,
+          flashes: +document.querySelector('[data-name="flash"] .stage').dataset.flashes,
         };
       }, PROBES)
       .then((seen) => ({ ...seen, errors }));
@@ -125,6 +128,7 @@ describe('moments', { concurrency: true }, () => {
           seen.toastMs >= TOAST_MS,
           `the toast showed for ${seen.toastMs} ms, less than its ${TOAST_MS} ms`,
         );
+        assert.equal(seen.flashes, 2, 'the flash showed its colour both times');
         assert.equal(seen.travel, reducedMotion === 'reduce' ? '0' : '1', '--travel');
       });
 });

@@ -99,7 +99,7 @@
           "light": "#3B2416",
           "dark": "#0E0805"
         },
-        "usage": "Top bar, command palette shadow, toasts, code wells, the offline banner."
+        "usage": "Top bar, command palette shadow, toasts, the offline banner. Code wells have --code."
       },
       {
         "name": "chocolate-soft",
@@ -124,6 +124,70 @@
           "dark": "#C9B28A"
         },
         "usage": "Secondary text in the top bar and sidebar."
+      },
+      {
+        "name": "code",
+        "value": {
+          "light": "#3B2416",
+          "dark": "#0E0805"
+        },
+        "usage": "Code wells: blocks of code, terminals, requests and answers. Dark in both themes, so code reads the same everywhere."
+      },
+      {
+        "name": "on-code",
+        "value": {
+          "light": "#F7EBD0",
+          "dark": "#F7EBD0"
+        },
+        "usage": "Code and plain text in a code well."
+      },
+      {
+        "name": "on-code-muted",
+        "value": {
+          "light": "#E9D6B0",
+          "dark": "#C9B28A"
+        },
+        "usage": "Comments, punctuation, line numbers and labels in a code well."
+      },
+      {
+        "name": "code-rule",
+        "value": {
+          "light": "#5A3822",
+          "dark": "#160D07"
+        },
+        "usage": "Lines between rows and panes inside a code well. Decorative only."
+      },
+      {
+        "name": "code-keyword",
+        "value": {
+          "light": "#E1A730",
+          "dark": "#E1A730"
+        },
+        "usage": "Keywords, keys and the line being pointed at in a code well."
+      },
+      {
+        "name": "code-string",
+        "value": {
+          "light": "#C9D98A",
+          "dark": "#C9D98A"
+        },
+        "usage": "Strings and values in a code well."
+      },
+      {
+        "name": "code-function",
+        "value": {
+          "light": "#F2B48F",
+          "dark": "#F2B48F"
+        },
+        "usage": "Function names, numbers and constants in a code well."
+      },
+      {
+        "name": "code-focus",
+        "value": {
+          "light": "#E1A730",
+          "dark": "#E1A730"
+        },
+        "usage": "The focus ring on controls inside a code well (draw it without --focus-edge there)."
       },
       {
         "name": "mustard",

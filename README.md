@@ -45,6 +45,17 @@ import { looks, motion } from '@moteurio/design';
 <button data-moment="press copied" data-state="done">…</button>
 ```
 
+Component CSS can use the same arrival, leaving and flash: the `moteur-enter`, `moteur-leave` and
+`moteur-flash` keyframes, set with `--enter-*`, `--leave-*` and `--flash`, timed with durations
+that reduced motion already caps (`--motion-pop`, `--motion-linger` and the rest).
+
+```css
+.chip {
+  --enter-y: 6px;
+  animation: moteur-enter var(--motion-pop) var(--spring-pop) both;
+}
+```
+
 **Helper.** A small ES module for the few moments CSS can't do alone: a title flying from a list
 into the editor, a counter rolling its digits, press and hold, a toast's timer. It can be
 tree-shaken.
@@ -63,6 +74,11 @@ Discothèque is the default look and needs no attribute. Folio is set with `data
 
 Each look has a light and a dark theme. Without an attribute the system setting decides;
 `data-theme="light"` or `data-theme="dark"` on `<html>` forces one.
+
+A part of a page can wear Folio whatever the page's look, such as a preview of one look inside
+the other: put `data-look="folio"` on that element. Its colours, type, shapes and motion tokens
+follow inside it, and its theme is the page's unless it has a `data-theme` of its own. Moments keep
+the page's look.
 
 Folio's fonts are separate, so a page loads them only when someone picks Folio:
 `@moteurio/design/fonts/folio.css`.
@@ -91,7 +107,9 @@ It turns on no style or formatting rules, only these:
   functions (`rgb()`, `hsl()`, `oklch()` and the rest). Use a colour variable.
 - **Raw motion** (`moteur/motion-tokens`): a duration or delay written in `ms` or `s`, or a
   `cubic-bezier()` or `linear()` curve, in `transition` and `animation` and their longhands. `0s`,
-  `inherit` and anything inside `var(…)` pass.
+  `inherit` and anything inside `var(…)` pass, except an uncapped token as the duration of a
+  `moteur-` keyframe: `moteur-enter var(--spring-pop-duration)` should be
+  `moteur-enter var(--motion-pop)`, which stays short under reduced motion.
 - **Killing motion** (`moteur/no-motion-kill`): durations above zero and under 10 ms, like
   `animation-duration: 0.01ms`, and, for reduced motion, `animation: none`, `transition: none` or
   `!important` on an animation or transition. These skip moments and fire timers at once; reduce
@@ -151,6 +169,10 @@ pnpm test    # plays every moment in a browser, in both looks, with and without 
 minimum: 4.5:1 for text, 3:1 for large text and for focus rings and the edges of controls. The
 check measures every pair in both looks and both themes, on the values the generated CSS gives
 each variable, and prints a table of the pairs that fall short.
+
+An app can hold its own colours to the same standard: `@moteurio/design/contrast` exports the
+checker's `ratio(fg, bg)` (WCAG contrast, hex or `rgb()`) and `shown(ratio)` (rounded down, as
+the tables show it).
 
 **Reduced motion.** `pnpm test` opens `test/fixture/`, a page with one live example of each
 moment, in Chromium through `playwright-core`, and plays them all. In each look, with reduced

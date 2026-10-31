@@ -110,6 +110,24 @@ export function slide(indicator, target) {
   }).then(() => {});
 }
 
+/**
+ * Marks something you just changed with the flash moment: adds data-moment="flash" if it isn't
+ * there, or plays the flash again from the start if it is, so a second change flashes too.
+ * Resolves when the colour has faded.
+ */
+export function flash(el) {
+  const moments = (el.dataset.moment ?? '').split(/\s+/).filter(Boolean);
+  const others = moments.filter((m) => m !== 'flash');
+  if (others.length < moments.length) {
+    // Already flashing or flashed: take the moment off for one style pass, so it starts anew.
+    el.dataset.moment = others.join(' ');
+    void getComputedStyle(el).animationName;
+  }
+  el.dataset.moment = [...others, 'flash'].join(' ');
+  const runs = el.getAnimations().filter((a) => a.animationName?.startsWith('moteur-flash'));
+  return Promise.all(runs.map(done)).then(() => {});
+}
+
 /** Rolls a counter to `value`: only the digits that change roll, and the badge gives a bump. */
 export function count(el, value) {
   const next = String(value);

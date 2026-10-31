@@ -29,15 +29,15 @@ exists in Folio alone.
 
 ### Surfaces
 
-| Variable           | Means                                                                               | Folio role      |
-| ------------------ | ----------------------------------------------------------------------------------- | --------------- |
-| `--paper`          | The page ground behind everything. A page never sits on white.                      | `canvas`        |
-| `--paper-raised`   | Anything that is an object on the page: cards, tiles, dialogs.                      | `surface`       |
-| `--paper-sunk`     | Wells: board columns, progress tracks, skeleton base.                               | `surface-sunk`  |
-| `--paper-tint`     | Hover on rows and tiles; empty translation cells; dashed drop zones.                | `surface-hover` |
-| `--field`          | Inside text inputs and editors only, so typing surfaces read as paper you write on. | `field`         |
-| `--chocolate`      | Discothèque's dark band: top bar, toasts, code wells. In Folio, a plain surface.    | `surface`       |
-| `--chocolate-soft` | Sidebar ground; inputs inside the top bar. In Folio, a plain surface.               | `surface`       |
+| Variable           | Means                                                                                   | Folio role      |
+| ------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `--paper`          | The page ground behind everything. A page never sits on white.                          | `canvas`        |
+| `--paper-raised`   | Anything that is an object on the page: cards, tiles, dialogs.                          | `surface`       |
+| `--paper-sunk`     | Wells: board columns, progress tracks, skeleton base.                                   | `surface-sunk`  |
+| `--paper-tint`     | Hover on rows and tiles; empty translation cells; dashed drop zones.                    | `surface-hover` |
+| `--field`          | Inside text inputs and editors only, so typing surfaces read as paper you write on.     | `field`         |
+| `--chocolate`      | Discothèque's dark band: top bar, toasts. In Folio, a plain surface. Code has `--code`. | `surface`       |
+| `--chocolate-soft` | Sidebar ground; inputs inside the top bar. In Folio, a plain surface.                   | `surface`       |
 
 | Variable           | Discothèque light | Discothèque dark | Folio light | Folio dark |
 | ------------------ | ----------------- | ---------------- | ----------- | ---------- |
@@ -137,6 +137,33 @@ differently. Prefer them to the raw colour.
 `--chocolate` is white in Folio: Folio has no dark band, so the top bar and sidebar are plain
 surfaces. For a toast or tooltip that must stay dark in both looks, use `--inverse`.
 
+### Code wells
+
+A code well is a dark panel for code: a block of code, a terminal, a request and its answer. It
+stays dark in both themes, so code reads the same everywhere, and it has its own syntax colours.
+
+| Variable          | Means                                                               | Folio role        |
+| ----------------- | ------------------------------------------------------------------- | ----------------- |
+| `--code`          | The well.                                                           | `code`            |
+| `--on-code`       | Code and plain text in it.                                          | `code-text`       |
+| `--on-code-muted` | Comments, punctuation, line numbers and labels.                     | `code-text-muted` |
+| `--code-rule`     | Lines between rows and panes inside the well. Decorative only.      | `code-border`     |
+| `--code-keyword`  | Keywords, keys and the line being pointed at.                       | `code-keyword`    |
+| `--code-string`   | Strings and values.                                                 | `code-string`     |
+| `--code-function` | Function names, numbers and constants.                              | `code-function`   |
+| `--code-focus`    | The focus ring on a control inside the well, in place of `--focus`. | `code-focus`      |
+
+| Variable          | Discothèque light | Discothèque dark | Folio light | Folio dark |
+| ----------------- | ----------------- | ---------------- | ----------- | ---------- |
+| `--code`          | `#3B2416`         | `#0E0805`        | `#1A2029`   | `#1A2029`  |
+| `--on-code`       | `#F7EBD0`         | `#F7EBD0`        | `#E8EBEF`   | `#E8EBEF`  |
+| `--on-code-muted` | `#E9D6B0`         | `#C9B28A`        | `#9AA4B2`   | `#9AA4B2`  |
+| `--code-rule`     | `#5A3822`         | `#160D07`        | `#2C3440`   | `#2C3440`  |
+| `--code-keyword`  | `#E1A730`         | `#E1A730`        | `#8DB4F5`   | `#8DB4F5`  |
+| `--code-string`   | `#C9D98A`         | `#C9D98A`        | `#7FD4A8`   | `#7FD4A8`  |
+| `--code-function` | `#F2B48F`         | `#F2B48F`        | `#F0B37E`   | `#F0B37E`  |
+| `--code-focus`    | `#E1A730`         | `#E1A730`        | `#6EA0F2`   | `#6EA0F2`  |
+
 ### Folio only
 
 These exist as `--folio-*` variables only under `data-look="folio"`:
@@ -194,6 +221,11 @@ needs (4.5:1 for text, 3:1 for large text and for focus rings and the edges of c
 | `--on-chocolate-muted`      | `--chocolate`      | 4.5:1 | 10.1 / 9.6  | 7.0 / 7.9   | secondary text in the top bar  |
 | `--on-inverse`              | `--inverse`        | 4.5:1 | 12.2 / 16.8 | 15.1 / 15.4 | toasts                         |
 | `--on-inverse-accent`       | `--inverse`        | 4.5:1 | 6.7 / 9.2   | 7.7 / 5.7   | the action word in a toast     |
+| `--on-code`                 | `--code`           | 4.5:1 | 12.2 / 16.8 | 13.6 / 13.6 | code                           |
+| `--on-code-muted`           | `--code`           | 4.5:1 | 10.1 / 9.6  | 6.4 / 6.4   | comments and labels in code    |
+| `--code-keyword`            | `--code`           | 4.5:1 | 6.7 / 9.2   | 7.7 / 7.7   | keywords in code               |
+| `--code-string`             | `--code`           | 4.5:1 | 9.5 / 13.0  | 9.2 / 9.2   | strings in code                |
+| `--code-function`           | `--code`           | 4.5:1 | 8.0 / 11.0  | 8.9 / 8.9   | function names in code         |
 | `--ink-line`                | `--field`          | 3:1   | 4.2 / 4.3   | 3.6 / 4.0   | input edges                    |
 | `--ink-line`                | `--paper`          | 3:1   | 3.6 / 4.2   | 3.3 / 4.1   | input edges                    |
 | `--ink-line`                | `--paper-sunk`     | 3:1   | 3.2 / 3.9   | 3.1 / 4.3   | input edges                    |
@@ -206,6 +238,7 @@ needs (4.5:1 for text, 3:1 for large text and for focus rings and the edges of c
 | `--focus` or `--focus-edge` | `--field`          | 3:1   | 14.4 / 8.8  | 6.0 / 6.7   | focus ring                     |
 | `--focus` or `--focus-edge` | `--chocolate`      | 3:1   | 6.7 / 9.2   | 6.0 / 6.4   | focus ring                     |
 | `--focus` or `--focus-edge` | `--chocolate-soft` | 3:1   | 4.8 / 8.9   | 6.0 / 6.4   | focus ring                     |
+| `--code-focus`              | `--code`           | 3:1   | 6.7 / 9.2   | 6.2 / 6.2   | focus ring in a code well      |
 
 <!-- /contrast-pairs -->
 

@@ -4,6 +4,7 @@
 import {
   bin,
   count,
+  flash,
   flight,
   growFrom,
   hold,
@@ -317,6 +318,41 @@ add(
     };
   },
   'hold()',
+);
+
+add(
+  'Micro-interactions',
+  'flash',
+  'Anything you just changed',
+  'Use the title: the slug it rewrote flashes, and again each time. Someone else’s change is a change-mark.',
+  (stage) => {
+    stage.innerHTML = `<div class="rows" style="left:24px"><div class="row"><b>Title</b><small>Paris, un an après</small></div><div class="row slug"><b>Slug</b><small>paris</small></div><button type="button" class="btn small use" style="justify-self:start">Use the title</button></div>`;
+    const row = $('.slug', stage);
+    const slugs = ['paris-un-an-apres', 'paris'];
+    let n = 0;
+    /** Rewrites the slug and flashes it; resolves with whether its colour was seen to change. */
+    const use = async () => {
+      $('small', row).textContent = slugs[n++ % 2];
+      const own = getComputedStyle(row).backgroundColor;
+      let seen = false;
+      let over = false;
+      const look = () => {
+        seen ||= getComputedStyle(row).backgroundColor !== own;
+        if (!over) requestAnimationFrame(look);
+      };
+      look();
+      await flash(row);
+      over = true;
+      return seen;
+    };
+    $('.use', stage).onclick = use;
+    return async () => {
+      // Twice: the second flash must play again on a row already marked.
+      const shown = [await use(), await use()];
+      stage.dataset.flashes = String(shown.filter(Boolean).length);
+    };
+  },
+  'flash()',
 );
 
 // ── Moments ────────────────────────────────────────────────────────────────────────────────────

@@ -118,6 +118,70 @@
         "usage": "The action word in a toast (Undo, View): ≥5:1 on inverse in both themes."
       },
       {
+        "name": "code",
+        "value": {
+          "light": "#1A2029",
+          "dark": "#1A2029"
+        },
+        "usage": "Code wells: blocks of code, terminals, requests and answers. Dark in both themes. Discothèque role: code."
+      },
+      {
+        "name": "code-text",
+        "value": {
+          "light": "#E8EBEF",
+          "dark": "#E8EBEF"
+        },
+        "usage": "Code and plain text in a code well (≥13:1)."
+      },
+      {
+        "name": "code-text-muted",
+        "value": {
+          "light": "#9AA4B2",
+          "dark": "#9AA4B2"
+        },
+        "usage": "Comments, punctuation, line numbers and labels in a code well."
+      },
+      {
+        "name": "code-border",
+        "value": {
+          "light": "#2C3440",
+          "dark": "#2C3440"
+        },
+        "usage": "Lines between rows and panes inside a code well. Decorative only."
+      },
+      {
+        "name": "code-keyword",
+        "value": {
+          "light": "#8DB4F5",
+          "dark": "#8DB4F5"
+        },
+        "usage": "Keywords, keys and the line being pointed at in a code well."
+      },
+      {
+        "name": "code-string",
+        "value": {
+          "light": "#7FD4A8",
+          "dark": "#7FD4A8"
+        },
+        "usage": "Strings and values in a code well."
+      },
+      {
+        "name": "code-function",
+        "value": {
+          "light": "#F0B37E",
+          "dark": "#F0B37E"
+        },
+        "usage": "Function names, numbers and constants in a code well."
+      },
+      {
+        "name": "code-focus",
+        "value": {
+          "light": "#6EA0F2",
+          "dark": "#6EA0F2"
+        },
+        "usage": "The focus ring on controls inside a code well: the dark theme's focus, since the well is dark in both. Discothèque role: code-focus."
+      },
+      {
         "name": "accent",
         "value": {
           "light": "#1F5FC4",

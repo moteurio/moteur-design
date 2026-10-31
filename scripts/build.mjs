@@ -202,6 +202,14 @@ ${themed(
     'chocolate-soft': 'surface',
     'on-chocolate': 'text',
     'on-chocolate-muted': 'text-muted',
+    code: 'code',
+    'on-code': 'code-text',
+    'on-code-muted': 'code-text-muted',
+    'code-rule': 'code-border',
+    'code-keyword': 'code-keyword',
+    'code-string': 'code-string',
+    'code-function': 'code-function',
+    'code-focus': 'code-focus',
     mustard: 'accent-soft',
     'on-mustard': 'accent-text',
     'mustard-soft': 'warning-soft',
@@ -322,10 +330,15 @@ ${themed(
   files['css/folio.css'] = `/* Folio. ${HEADER} */
 ${themed(
   'folio',
+  // Folio also applies to a part of a page (data-look="folio" on any element), whatever the
+  // page's look: its theme is its own data-theme when it has one, the page's otherwise.
   {
-    light: `:root[data-look='folio']`,
-    systemDark: `:root[data-look='folio']:not([data-theme='${light}'])`,
-    dark: `:root[data-look='folio'][data-theme='${dark}']`,
+    light: `:root[data-look='folio'],\n[data-look='folio']`,
+    systemDark: `:root[data-look='folio']:not([data-theme='${light}']),
+  :root:not([data-theme='${light}']) [data-look='folio']:not([data-theme='${light}'])`,
+    dark: `:root[data-look='folio'][data-theme='${dark}'],
+:root[data-theme='${dark}'] [data-look='folio']:not([data-theme='${light}']),
+[data-look='folio'][data-theme='${dark}']`,
   },
   colorsIn(light),
   colorsIn(dark),

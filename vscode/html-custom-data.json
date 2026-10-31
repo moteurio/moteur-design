@@ -19,7 +19,7 @@
           "name": "change-mark",
           "description": {
             "kind": "markdown",
-            "value": "**ChangeMark.** something someone else just changed, when added: part `bar` draws down the edge, part `highlight` sweeps the words, then both fade over about 4 s."
+            "value": "**ChangeMark.** something someone else just changed (yours is a `flash`), when added: part `bar` draws down the edge, part `highlight` sweeps the words, then both fade over about 4 s."
           }
         },
         {
@@ -69,6 +69,13 @@
           "description": {
             "kind": "markdown",
             "value": "**TextField, every field.** on the box around the input; `data-invalid`: Discothèque shakes once, Folio draws a rust line under the field. Part `message` (inside, or a sibling after it) drops in (Folio: rises)."
+          }
+        },
+        {
+          "name": "flash",
+          "description": {
+            "kind": "markdown",
+            "value": "**Anything you just changed.** something you just changed, away from where you clicked, when added or with `flash(el)` (which plays it again on an element already marked): the background takes `--flash` and fades back to its own. Discothèque hits at once in marigold, holds a beat and fades over three drifts; Folio's pale wash soaks in like ink, then dries. Under reduced motion the colour still shows and fades in 200 ms. Someone else's change is a `change-mark`."
           }
         },
         {

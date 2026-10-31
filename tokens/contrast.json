@@ -194,6 +194,36 @@
       "for": "the action word in a toast"
     },
     {
+      "fg": "on-code",
+      "bg": "code",
+      "min": 4.5,
+      "for": "code"
+    },
+    {
+      "fg": "on-code-muted",
+      "bg": "code",
+      "min": 4.5,
+      "for": "comments and labels in code"
+    },
+    {
+      "fg": "code-keyword",
+      "bg": "code",
+      "min": 4.5,
+      "for": "keywords in code"
+    },
+    {
+      "fg": "code-string",
+      "bg": "code",
+      "min": 4.5,
+      "for": "strings in code"
+    },
+    {
+      "fg": "code-function",
+      "bg": "code",
+      "min": 4.5,
+      "for": "function names in code"
+    },
+    {
       "fg": "ink-line",
       "bg": "field",
       "min": 3,
@@ -265,6 +295,12 @@
       "bg": "chocolate-soft",
       "min": 3,
       "for": "focus ring"
+    },
+    {
+      "fg": "code-focus",
+      "bg": "code",
+      "min": 3,
+      "for": "focus ring in a code well"
     }
   ],
   "avoid": [

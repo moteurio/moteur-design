@@ -2,6 +2,8 @@
 //
 // - moteur/motion-tokens: transition and animation take their durations and curves from the
 //   tokens. A raw "300ms" or "cubic-bezier(…)" is a value the looks and reduced motion can't reach.
+//   And moments.css's keyframes (moteur-enter, moteur-flash…) last a capped duration, such as
+//   var(--motion-pop), not var(--spring-pop-duration), so they stay short under reduced motion.
 // - moteur/no-motion-kill: no "animation-duration: 0.01ms" or "animation: none" for reduced
 //   motion. Ending animations at once fires timers at once and closes toasts before anyone sees
 //   them; moments.css reduces motion with --travel, --loop and --motion-cap instead.
@@ -38,11 +40,46 @@ function withoutVars(value) {
   return out;
 }
 
+/** The value split at top-level commas or spaces, leaving what's inside brackets whole. */
+function split(value, sep) {
+  const parts = [''];
+  let depth = 0;
+  for (const c of value) {
+    if (c === '(') depth++;
+    else if (c === ')') depth--;
+    if (depth === 0 && (sep === ',' ? c === ',' : /\s/.test(c))) parts.push('');
+    else parts[parts.length - 1] += c;
+  }
+  return parts.map((p) => p.trim()).filter(Boolean);
+}
+
+// A duration token on its own: var(--duration-pop), var(--spring-settle-duration).
+const UNCAPPED = /^var\(\s*--(duration-([a-z]+)|spring-([a-z]+)-duration)\s*[,)]/i;
+// What an animation's duration can look like, so the first one in a layer is its duration and
+// any after it its delay.
+const TIMELIKE =
+  /^((\d*\.?\d+)(ms|s)|(min|max|calc|clamp)\(|var\(\s*--([\w-]*duration[\w-]*|motion-[\w-]+|[\w-]*-time)\s*[,)])/i;
+
+/** For each animation layer that plays one of moments.css's keyframes: its duration, if uncapped. */
+function uncapped(layers) {
+  const found = [];
+  for (const layer of layers) {
+    const words = split(layer, ' ');
+    if (!words.some((w) => /^moteur-[\w-]+$/i.test(w))) continue;
+    const duration = words.find((w) => TIMELIKE.test(w));
+    const m = duration?.match(UNCAPPED);
+    if (m) found.push([duration, `--motion-${m[2] ?? m[3]}`]);
+  }
+  return found;
+}
+
 const motionTokens = 'moteur/motion-tokens';
 const motionTokensMessages = ruleMessages(motionTokens, {
   time: (t) =>
     `Raw duration "${t}": use a token, such as var(--duration-pop) or var(--spring-pop-duration)`,
   curve: (c) => `Raw curve "${c}(…)": use a token, such as var(--ease-glide) or var(--spring-pop)`,
+  uncapped: (d, capped) =>
+    `Uncapped "${d}" for a moments.css keyframe: use var(${capped}), which stays short under reduced motion`,
 });
 
 const motionTokensRule = (on) => (root, result) => {
@@ -66,6 +103,26 @@ const motionTokensRule = (on) => (root, result) => {
         node: decl,
         word: fn,
         message: motionTokensMessages.curve(fn),
+      });
+    // animation, or animation-duration beside an animation-name, layer by layer.
+    let layers = null;
+    if (/^animation$/i.test(decl.prop)) layers = split(decl.value, ',');
+    else if (/^animation-duration$/i.test(decl.prop)) {
+      const names = decl.parent.nodes.findLast(
+        (n) => n.type === 'decl' && /^animation-name$/i.test(n.prop),
+      );
+      if (names) {
+        const durations = split(decl.value, ',');
+        layers = split(names.value, ',').map((n, i) => `${n} ${durations[i % durations.length]}`);
+      }
+    }
+    for (const [d, capped] of uncapped(layers ?? []))
+      report({
+        result,
+        ruleName: motionTokens,
+        node: decl,
+        word: d,
+        message: motionTokensMessages.uncapped(d, capped),
       });
   });
 };

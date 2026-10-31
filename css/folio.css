@@ -1,5 +1,6 @@
 /* Folio. Generated from tokens/*.json by scripts/build.mjs. Do not edit. */
-:root[data-look='folio'] {
+:root[data-look='folio'],
+[data-look='folio'] {
   --paper: #f5f6f8;
   --paper-raised: #ffffff;
   --paper-sunk: #edeff2;
@@ -14,6 +15,14 @@
   --chocolate-soft: #ffffff;
   --on-chocolate: #1a2029;
   --on-chocolate-muted: #4f5a68;
+  --code: #1a2029;
+  --on-code: #e8ebef;
+  --on-code-muted: #9aa4b2;
+  --code-rule: #2c3440;
+  --code-keyword: #8db4f5;
+  --code-string: #7fd4a8;
+  --code-function: #f0b37e;
+  --code-focus: #6ea0f2;
   --mustard: #e8f0fc;
   --on-mustard: #1c56b3;
   --mustard-soft: #fff4db;
@@ -50,6 +59,14 @@
   --folio-inverse: #1a2029;
   --folio-on-inverse: #f5f6f8;
   --folio-on-inverse-accent: #8db4f5;
+  --folio-code: #1a2029;
+  --folio-code-text: #e8ebef;
+  --folio-code-text-muted: #9aa4b2;
+  --folio-code-border: #2c3440;
+  --folio-code-keyword: #8db4f5;
+  --folio-code-string: #7fd4a8;
+  --folio-code-function: #f0b37e;
+  --folio-code-focus: #6ea0f2;
   --folio-accent: #1f5fc4;
   --folio-accent-hover: #194fa6;
   --folio-on-accent: #ffffff;
@@ -215,7 +232,8 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-look='folio']:not([data-theme='light']) {
+  :root[data-look='folio']:not([data-theme='light']),
+  :root:not([data-theme='light']) [data-look='folio']:not([data-theme='light']) {
     --paper: #111418;
     --paper-raised: #191d23;
     --paper-sunk: #0d1014;
@@ -230,6 +248,14 @@
     --chocolate-soft: #191d23;
     --on-chocolate: #e8ebef;
     --on-chocolate-muted: #aab3bf;
+    --code: #1a2029;
+    --on-code: #e8ebef;
+    --on-code-muted: #9aa4b2;
+    --code-rule: #2c3440;
+    --code-keyword: #8db4f5;
+    --code-string: #7fd4a8;
+    --code-function: #f0b37e;
+    --code-focus: #6ea0f2;
     --mustard: #17253b;
     --on-mustard: #8db4f5;
     --mustard-soft: #33270d;
@@ -266,6 +292,14 @@
     --folio-inverse: #e8ebef;
     --folio-on-inverse: #111418;
     --folio-on-inverse-accent: #1c56b3;
+    --folio-code: #1a2029;
+    --folio-code-text: #e8ebef;
+    --folio-code-text-muted: #9aa4b2;
+    --folio-code-border: #2c3440;
+    --folio-code-keyword: #8db4f5;
+    --folio-code-string: #7fd4a8;
+    --folio-code-function: #f0b37e;
+    --folio-code-focus: #6ea0f2;
     --folio-accent: #6ea0f2;
     --folio-accent-hover: #8db4f5;
     --folio-on-accent: #0d1014;
@@ -302,7 +336,9 @@
     color-scheme: dark;
   }
 }
-:root[data-look='folio'][data-theme='dark'] {
+:root[data-look='folio'][data-theme='dark'],
+:root[data-theme='dark'] [data-look='folio']:not([data-theme='light']),
+[data-look='folio'][data-theme='dark'] {
   --paper: #111418;
   --paper-raised: #191d23;
   --paper-sunk: #0d1014;
@@ -317,6 +353,14 @@
   --chocolate-soft: #191d23;
   --on-chocolate: #e8ebef;
   --on-chocolate-muted: #aab3bf;
+  --code: #1a2029;
+  --on-code: #e8ebef;
+  --on-code-muted: #9aa4b2;
+  --code-rule: #2c3440;
+  --code-keyword: #8db4f5;
+  --code-string: #7fd4a8;
+  --code-function: #f0b37e;
+  --code-focus: #6ea0f2;
   --mustard: #17253b;
   --on-mustard: #8db4f5;
   --mustard-soft: #33270d;
@@ -353,6 +397,14 @@
   --folio-inverse: #e8ebef;
   --folio-on-inverse: #111418;
   --folio-on-inverse-accent: #1c56b3;
+  --folio-code: #1a2029;
+  --folio-code-text: #e8ebef;
+  --folio-code-text-muted: #9aa4b2;
+  --folio-code-border: #2c3440;
+  --folio-code-keyword: #8db4f5;
+  --folio-code-string: #7fd4a8;
+  --folio-code-function: #f0b37e;
+  --folio-code-focus: #6ea0f2;
   --folio-accent: #6ea0f2;
   --folio-accent-hover: #8db4f5;
   --folio-on-accent: #0d1014;

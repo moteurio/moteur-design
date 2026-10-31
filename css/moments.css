@@ -19,13 +19,19 @@
   --loop: infinite;
   --motion-cap: 100s;
 
-  /* Durations with the cap applied, for the rules below. Names starting --m- are internal. */
-  --m-snap: min(var(--duration-snap), var(--motion-cap));
-  --m-pop: min(var(--spring-pop-duration), var(--motion-cap));
-  --m-settle: min(var(--spring-settle-duration), var(--motion-cap));
-  --m-glide: min(var(--duration-glide), var(--motion-cap));
-  --m-drift: min(var(--duration-drift), var(--motion-cap));
-  --m-pen: min(var(--duration-pen), var(--motion-cap));
+  /* The duration tokens with the cap applied: what an animation that fades or draws should last.
+     They follow the page's look. Delays and timers take the plain tokens. */
+  --motion-snap: min(var(--duration-snap), var(--motion-cap));
+  --motion-pop: min(var(--spring-pop-duration), var(--motion-cap));
+  --motion-settle: min(var(--spring-settle-duration), var(--motion-cap));
+  --motion-glide: min(var(--duration-glide), var(--motion-cap));
+  --motion-drift: min(var(--duration-drift), var(--motion-cap));
+  --motion-pen: min(var(--duration-pen), var(--motion-cap));
+  /* Long enough for a change to be seen: three drifts. */
+  --motion-linger: min(calc(var(--duration-drift) * 3), var(--motion-cap));
+
+  /* The fill of moteur-flash and the flash moment. */
+  --flash: color-mix(in srgb, var(--mustard) 40%, transparent);
 
   /* Per-look settings a component may override on its own element. */
   --switch-thumb: 20px;
@@ -33,6 +39,7 @@
   --switch-stretch: 6px;
 }
 :root[data-look='folio'] {
+  --flash: var(--folio-accent-soft);
   --switch-thumb: 16px;
   --switch-travel: 20px;
   --switch-stretch: 4px;
@@ -59,27 +66,89 @@
 
 /* ── Shared keyframes ───────────────────────────────────────────────────────────────────────── */
 
-/* Arriving: from an offset (--m-x, --m-y), a scale (--m-s) and a turn (--m-r), all times
-   --travel, so under reduced motion only the fade is left. */
+/* Arriving and leaving, for moments and for component CSS alike (docs/motion.md › Arriving and
+   leaving). moteur-enter comes in from --enter-x, --enter-y, --enter-scale, --enter-turn and
+   --enter-opacity; moteur-leave goes out to the --leave-* ones. Distances, scales and turns are
+   multiplied by --travel, so under reduced motion only the fade is left. The offsets don't
+   inherit: each is read on the element that animates, so a toast's 90 px never reaches the badge
+   inside it. */
+@property --enter-x {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --enter-y {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --enter-scale {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+@property --enter-turn {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --enter-opacity {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+@property --leave-x {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --leave-y {
+  syntax: '<length-percentage>';
+  inherits: false;
+  initial-value: 0px;
+}
+@property --leave-scale {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 1;
+}
+@property --leave-turn {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@property --leave-opacity {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
 @keyframes moteur-enter {
   from {
-    opacity: var(--m-o, 0);
+    opacity: var(--enter-opacity, 0);
     transform: translate(
-        calc(var(--m-x, 0px) * var(--travel)),
-        calc(var(--m-y, 0px) * var(--travel))
+        calc(var(--enter-x, 0px) * var(--travel)),
+        calc(var(--enter-y, 0px) * var(--travel))
       )
-      scale(calc(1 - (1 - var(--m-s, 1)) * var(--travel)))
-      rotate(calc(var(--m-r, 0deg) * var(--travel)));
+      scale(calc(1 - (1 - var(--enter-scale, 1)) * var(--travel)))
+      rotate(calc(var(--enter-turn, 0deg) * var(--travel)));
   }
 }
 @keyframes moteur-leave {
   to {
-    opacity: 0;
+    opacity: var(--leave-opacity, 0);
     transform: translate(
-        calc(var(--m-x, 0px) * var(--travel)),
-        calc(var(--m-y, 0px) * var(--travel))
+        calc(var(--leave-x, 0px) * var(--travel)),
+        calc(var(--leave-y, 0px) * var(--travel))
       )
-      scale(calc(1 - (1 - var(--m-s, 1)) * var(--travel)));
+      scale(calc(1 - (1 - var(--leave-scale, 1)) * var(--travel)))
+      rotate(calc(var(--leave-turn, 0deg) * var(--travel)));
+  }
+}
+/* "You just changed this": the background starts as --flash and fades back to its own. A colour,
+   so it stays under reduced motion (capped like every fade). */
+@keyframes moteur-flash {
+  from {
+    background-color: var(--flash);
   }
 }
 @keyframes moteur-fade-in {
@@ -166,8 +235,8 @@
 [data-moment~='press'] {
   transition:
     translate calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle) 90ms,
-    box-shadow var(--m-settle) var(--spring-settle) 90ms,
-    filter var(--m-settle) ease 90ms;
+    box-shadow var(--motion-settle) var(--spring-settle) 90ms,
+    filter var(--motion-settle) ease 90ms;
 }
 [data-moment~='press']:is(:active, [data-pressed]):not(:disabled, [aria-disabled='true']) {
   translate: calc(var(--press) * var(--travel)) calc(var(--press) * var(--travel));
@@ -282,8 +351,8 @@
   [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) [data-part='message'],
   [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) ~ [data-part='message']
 ) {
-  --m-y: -6px;
-  animation: moteur-enter var(--m-pop) var(--spring-pop) 140ms both;
+  --enter-y: -6px;
+  animation: moteur-enter var(--motion-pop) var(--spring-pop) 140ms both;
 }
 :root[data-look='folio'] [data-moment~='field-error'][data-invalid] {
   animation: none;
@@ -302,15 +371,15 @@
 :root[data-look='folio']
   [data-moment~='field-error'][data-invalid]:not([data-invalid='false'])::after {
   scale: 1 1;
-  animation: moteur-line-x var(--m-pen) var(--ease-pen) both;
+  animation: moteur-line-x var(--motion-pen) var(--ease-pen) both;
 }
 :root[data-look='folio']
   :is(
     [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) [data-part='message'],
     [data-moment~='field-error'][data-invalid]:not([data-invalid='false']) ~ [data-part='message']
   ) {
-  --m-y: 4px;
-  animation: moteur-enter var(--m-settle) var(--spring-settle) 160ms both;
+  --enter-y: 4px;
+  animation: moteur-enter var(--motion-settle) var(--spring-settle) 160ms both;
 }
 
 /* ── save · SaveButton ──────────────────────────────────────────────────────────────────────── */
@@ -329,9 +398,9 @@
   display: inline-block;
 }
 [data-moment~='save'][data-state='dirty'] [data-part='dot'] {
-  --m-s: 0;
+  --enter-scale: 0;
   animation:
-    moteur-enter var(--m-pop) var(--spring-pop) both,
+    moteur-enter var(--motion-pop) var(--spring-pop) both,
     moteur-dot-ping calc(700ms * var(--travel)) ease-out 120ms;
 }
 @keyframes moteur-dot-ping {
@@ -343,7 +412,7 @@
   }
 }
 [data-moment~='save'][data-state='done'] [data-part='ink'] {
-  animation: moteur-draw var(--m-pen) var(--ease-pen) 60ms both;
+  animation: moteur-draw var(--motion-pen) var(--ease-pen) 60ms both;
 }
 [data-moment~='save'][data-state='failed'] {
   animation: moteur-shake 360ms var(--ease-shake);
@@ -362,12 +431,12 @@
   background: var(--rust);
   transform-origin: left;
   pointer-events: none;
-  animation: moteur-line-x var(--m-pen) var(--ease-pen) both;
+  animation: moteur-line-x var(--motion-pen) var(--ease-pen) both;
 }
 [data-moment~='save'][data-shortcut] {
   animation:
     moteur-press-in 90ms cubic-bezier(0.2, 0, 0, 1) forwards,
-    moteur-press-out var(--m-settle) var(--spring-settle) 150ms forwards;
+    moteur-press-out var(--motion-settle) var(--spring-settle) 150ms forwards;
 }
 :root[data-look='folio'] [data-moment~='save'][data-shortcut] {
   animation-name: moteur-press-in-folio, moteur-press-out-folio;
@@ -422,16 +491,16 @@
   transition-duration: min(120ms, var(--motion-cap));
 }
 [data-moment~='copied'][data-state='done'] [data-part='ink'] {
-  animation: moteur-draw var(--m-pen) var(--ease-pen) 40ms both;
+  animation: moteur-draw var(--motion-pen) var(--ease-pen) 40ms both;
 }
 [data-moment~='copied'] [data-part='tag'] {
   opacity: 0;
   pointer-events: none;
 }
 [data-moment~='copied'][data-state='done'] [data-part='tag'] {
-  --m-y: 6px;
+  --enter-y: 6px;
   animation:
-    moteur-enter var(--m-pop) var(--spring-pop),
+    moteur-enter var(--motion-pop) var(--spring-pop),
     moteur-tag-out min(200ms, var(--motion-cap)) linear 1100ms forwards;
   opacity: 1;
 }
@@ -464,16 +533,16 @@
    shake (Folio: their edges turn rust), then the digits leave right to left. */
 
 [data-moment~='code-cells'] [data-part='cell'] {
-  transition: border-color var(--m-pop);
+  transition: border-color var(--motion-pop);
 }
 [data-moment~='code-cells'] [data-part='cell'][data-filled] > * {
-  --m-y: var(--m-cell-y, -10px);
-  animation: moteur-enter var(--m-cell-time, var(--m-pop)) var(--m-cell-ease, var(--spring-pop))
-    both;
+  --enter-y: var(--m-cell-y, -10px);
+  animation: moteur-enter var(--m-cell-time, var(--motion-pop))
+    var(--m-cell-ease, var(--spring-pop)) both;
 }
 :root[data-look='folio'] [data-moment~='code-cells'] {
   --m-cell-y: 4px;
-  --m-cell-time: var(--m-settle);
+  --m-cell-time: var(--motion-settle);
   --m-cell-ease: var(--spring-settle);
 }
 :root[data-look='folio'] [data-moment~='code-cells'] [data-part='cell'][data-filled] {
@@ -492,7 +561,7 @@
   gap: 3px;
 }
 [data-moment~='code-cells'][data-state='done'] [data-part='ink'] {
-  animation: moteur-draw var(--m-pen) var(--ease-pen) 80ms both;
+  animation: moteur-draw var(--motion-pen) var(--ease-pen) 80ms both;
 }
 :root:not([data-look='folio'])
   :is(
@@ -507,12 +576,12 @@
   border-color: var(--rust);
 }
 [data-moment~='code-cells'][data-state='failed'] [data-part='cell'] > * {
-  --m-y: 6px;
+  --leave-y: 6px;
   animation: moteur-leave min(140ms, var(--motion-cap)) ease calc(700ms + var(--m-i, 0) * 40ms)
     forwards;
 }
 :root[data-look='folio'] [data-moment~='code-cells'][data-state='failed'] [data-part='cell'] > * {
-  --m-y: 0px;
+  --leave-y: 0px;
 }
 [data-moment~='code-cells'] [data-part='cell']:nth-last-child(2) > * {
   --m-i: 1;
@@ -563,20 +632,20 @@
    quicker than it came and without a spring. */
 
 [data-moment~='toast'] {
-  --m-y: 90px;
-  animation: moteur-enter var(--m-pop) var(--spring-pop) both;
+  --enter-y: 90px;
+  animation: moteur-enter var(--motion-pop) var(--spring-pop) both;
 }
 :root[data-look='folio'] [data-moment~='toast'] {
-  --m-y: 12px;
-  animation: moteur-enter var(--m-settle) var(--spring-settle) both;
+  --enter-y: 12px;
+  animation: moteur-enter var(--motion-settle) var(--spring-settle) both;
 }
 /* Leaving rules start with :root so they outrank Folio's arrival rules. */
 :root [data-moment~='toast'][data-state='leaving'] {
-  --m-y: 60px;
+  --leave-y: 60px;
   animation: moteur-leave min(180ms, var(--motion-cap)) var(--ease-glide) forwards;
 }
 :root[data-look='folio'] [data-moment~='toast'][data-state='leaving'] {
-  --m-y: 8px;
+  --leave-y: 8px;
   animation: moteur-leave min(140ms, var(--motion-cap)) var(--ease-glide) forwards;
 }
 [data-moment~='toast'] [data-part='timer'] {
@@ -603,7 +672,7 @@
 [data-moment~='stamp'] {
   rotate: -10deg;
   animation:
-    moteur-stamp var(--m-pop) var(--spring-pop) both,
+    moteur-stamp var(--motion-pop) var(--spring-pop) both,
     moteur-stamp-lift min(400ms, var(--motion-cap)) ease 1800ms forwards;
   pointer-events: none;
 }
@@ -639,7 +708,7 @@
 }
 [data-moment~='seal']:is([data-state='done'], [data-state='failed']) [data-part='fill'] {
   scale: 1 1;
-  animation: moteur-line-x var(--m-pen) var(--ease-pen) both;
+  animation: moteur-line-x var(--motion-pen) var(--ease-pen) both;
 }
 [data-moment~='seal']:not([data-state='done']) [data-part='ink'] {
   stroke-dashoffset: 1;
@@ -651,10 +720,10 @@
 [data-moment~='seal']:is([data-state='done'], [data-state='failed']) [data-part='edge'] {
   opacity: 1;
   transform-origin: top;
-  animation: moteur-line-y var(--m-pen) var(--ease-pen) 60ms both;
+  animation: moteur-line-y var(--motion-pen) var(--ease-pen) 60ms both;
 }
 [data-moment~='seal']:is([data-state='done'], [data-state='failed']) [data-part='label'] {
-  animation: moteur-label var(--m-pen) var(--ease-pen) both;
+  animation: moteur-label var(--motion-pen) var(--ease-pen) both;
 }
 @keyframes moteur-label {
   from {
@@ -662,14 +731,14 @@
   }
 }
 [data-moment~='seal'][data-state='done'] [data-part='badge'] {
-  --m-s: 0.3;
+  --enter-scale: 0.3;
   opacity: 1;
-  animation: moteur-enter var(--m-pop) var(--spring-pop) 260ms both;
+  animation: moteur-enter var(--motion-pop) var(--spring-pop) 260ms both;
 }
 
 /* Ink in a seal or a milestone writes in order: the first line at 120 ms, then 300 ms apart. */
 :is([data-moment~='seal'][data-state='done'], [data-moment~='milestone']) [data-part='ink'] {
-  animation: moteur-draw var(--m-pen) var(--ease-pen) 120ms both;
+  animation: moteur-draw var(--motion-pen) var(--ease-pen) 120ms both;
 }
 :is([data-moment~='seal'][data-state='done'], [data-moment~='milestone'])
   [data-part='ink']:nth-child(2) {
@@ -709,13 +778,13 @@
 [data-moment~='change-mark'] [data-part='bar'] {
   transform-origin: top;
   animation:
-    moteur-line-y var(--m-pen) var(--ease-pen) both,
+    moteur-line-y var(--motion-pen) var(--ease-pen) both,
     moteur-mark-fade min(3000ms, var(--motion-cap)) var(--ease-drift) 1400ms forwards;
 }
 [data-moment~='change-mark'] [data-part='highlight'] {
   transform-origin: left;
   animation:
-    moteur-line-x var(--m-pen) var(--ease-pen) 120ms both,
+    moteur-line-x var(--motion-pen) var(--ease-pen) 120ms both,
     moteur-mark-fade min(3000ms, var(--motion-cap)) var(--ease-drift) 1520ms forwards;
 }
 :root:not([data-look='folio']) [data-moment~='change-mark'] [data-part='highlight'] {
@@ -727,6 +796,31 @@
   }
 }
 
+/* ── flash · anything you just changed ──────────────────────────────────────────────────────── */
+/* Something you just changed, somewhere other than where you clicked (a value an option rewrote,
+   a row a save updated): its background takes --flash and fades back to its own. Discothèque
+   hits at once in marigold, holds a beat and fades; Folio's wash soaks in like ink and dries.
+   Runs when the attribute is added; flash() plays it again. Someone else's change is a
+   change-mark instead. Under reduced motion the colour still shows, and fades quicker. */
+
+[data-moment~='flash'] {
+  animation: moteur-flash var(--motion-linger) ease-out var(--duration-pop) backwards;
+}
+/* Folio soaks in and holds (--m-soak), then the fade starts where the soak ends: one after the
+   other, since an animation's start is whatever the one beneath it shows. */
+:root[data-look='folio'] [data-moment~='flash'] {
+  --m-soak: min(calc(var(--duration-pen) + var(--duration-snap)), var(--motion-cap));
+  animation:
+    moteur-flash-in var(--m-soak) var(--ease-pen),
+    moteur-flash var(--motion-linger) var(--ease-drift) var(--m-soak);
+}
+@keyframes moteur-flash-in {
+  60%,
+  to {
+    background-color: var(--flash);
+  }
+}
+
 /* ── milestone · Celebration ────────────────────────────────────────────────────────────────── */
 /* First publish and other firsts. The card drops in (Discothèque: from 24 px above, tilted a
    degree; Folio: settles 10 px), its seal writes itself, and one burst follows: ten strips of
@@ -734,14 +828,14 @@
    fades it. Under reduced motion the strips are simply there, scattered, and fade with it. */
 
 [data-moment~='milestone'] [data-part='card'] {
-  --m-y: -24px;
+  --enter-y: -24px;
   rotate: -1deg;
-  animation: moteur-enter var(--m-pop) var(--spring-pop) both;
+  animation: moteur-enter var(--motion-pop) var(--spring-pop) both;
 }
 :root[data-look='folio'] [data-moment~='milestone'] [data-part='card'] {
-  --m-y: -10px;
+  --enter-y: -10px;
   rotate: none;
-  animation: moteur-enter var(--m-settle) var(--spring-settle) both;
+  animation: moteur-enter var(--motion-settle) var(--spring-settle) both;
 }
 :root
   [data-moment~='milestone'][data-state='leaving']
@@ -867,8 +961,8 @@
    around the avatar and stays. */
 
 [data-moment~='arrival'] {
-  --m-x: 18px;
-  animation: moteur-enter var(--m-drift) var(--ease-glide) both;
+  --enter-x: 18px;
+  animation: moteur-enter var(--motion-drift) var(--ease-glide) both;
 }
 [data-moment~='arrival'] [data-part='ring'] {
   position: absolute;
@@ -954,12 +1048,12 @@
   animation: moteur-show 0s 560ms backwards;
 }
 :root[data-look='folio'] [data-moment~='curtain'][data-state='done'] [data-part='card'] {
-  --m-s: 0.98;
+  --leave-scale: 0.98;
   animation: moteur-leave min(200ms, var(--motion-cap)) ease-in forwards;
 }
 :root[data-look='folio'] [data-moment~='curtain'][data-state='done'] [data-part='view'] {
-  --m-y: 8px;
-  animation: moteur-enter var(--m-settle) var(--spring-settle) 200ms both;
+  --enter-y: 8px;
+  animation: moteur-enter var(--motion-settle) var(--spring-settle) 200ms both;
 }
 
 /* ── develop · Upload tile ──────────────────────────────────────────────────────────────────── */
@@ -1009,7 +1103,7 @@
   animation: moteur-fade-in min(160ms, var(--motion-cap)) both;
 }
 [data-moment~='develop'][data-state='done'] [data-part='ink'] {
-  animation: moteur-draw var(--m-pen) var(--ease-pen) 60ms both;
+  animation: moteur-draw var(--motion-pen) var(--ease-pen) 60ms both;
 }
 
 /* ── pen · Suggestion diff ──────────────────────────────────────────────────────────────────── */
@@ -1018,8 +1112,8 @@
    (accepted): the struck words fold away and the new ones settle into plain ink. */
 
 [data-moment~='pen'] {
-  --m-y: 4px;
-  animation: moteur-enter var(--m-glide) var(--ease-glide) both;
+  --enter-y: 4px;
+  animation: moteur-enter var(--motion-glide) var(--ease-glide) both;
 }
 :where([data-moment~='pen']) [data-part='del'] {
   position: relative;
@@ -1037,7 +1131,7 @@
   background: currentColor;
   transform-origin: left;
   pointer-events: none;
-  animation: moteur-line-x var(--m-pen) var(--ease-pen) 260ms both;
+  animation: moteur-line-x var(--motion-pen) var(--ease-pen) 260ms both;
 }
 [data-moment~='pen'] [data-part='ins'] {
   animation: moteur-write min(calc(var(--duration-pen) * 1.6), var(--motion-cap))
@@ -1057,7 +1151,7 @@
   transition:
     width calc(var(--duration-glide) * var(--travel)) var(--ease-glide),
     margin calc(var(--duration-glide) * var(--travel)) var(--ease-glide),
-    opacity var(--m-glide) var(--ease-glide);
+    opacity var(--motion-glide) var(--ease-glide);
 }
 [data-moment~='pen'][data-state='done'] [data-part='del'] {
   width: 0;
@@ -1128,18 +1222,18 @@
 [data-moment~='unfold'][data-state='open'] {
   transition:
     height calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
-    opacity var(--m-glide) var(--ease-glide),
+    opacity var(--motion-glide) var(--ease-glide),
     visibility 0s;
 }
 :root[data-look='folio'] [data-moment~='unfold'][data-state='open'] {
   transition:
     height calc(var(--duration-glide) * var(--travel)) var(--ease-glide),
-    opacity var(--m-glide) var(--ease-glide),
+    opacity var(--motion-glide) var(--ease-glide),
     visibility 0s;
 }
 [data-moment~='unfold'] > * {
   transition:
-    opacity var(--m-glide) var(--ease-glide),
+    opacity var(--motion-glide) var(--ease-glide),
     transform calc(var(--duration-glide) * var(--travel)) var(--ease-glide);
 }
 [data-moment~='unfold']:not([data-state='open']) > * {
@@ -1191,9 +1285,9 @@
    closes it, quicker and without rising. */
 
 [data-moment~='dialog'] {
-  --m-y: 16px;
+  --enter-y: 16px;
   animation:
-    moteur-enter var(--m-pop) var(--spring-pop) both,
+    moteur-enter var(--motion-pop) var(--spring-pop) both,
     moteur-shadow-in min(260ms, var(--motion-cap)) ease-out 90ms both;
 }
 @keyframes moteur-shadow-in {
@@ -1202,18 +1296,17 @@
   }
 }
 :root[data-look='folio'] [data-moment~='dialog'] {
-  --m-y: 8px;
-  --m-s: 0.98;
-  animation: moteur-enter var(--m-settle) var(--spring-settle) both;
+  --enter-y: 8px;
+  --enter-scale: 0.98;
+  animation: moteur-enter var(--motion-settle) var(--spring-settle) both;
 }
 [data-moment~='dialog']::backdrop,
 [data-moment~='dialog'] ~ [data-part='backdrop'],
 [data-part='backdrop']:has(~ [data-moment~='dialog']) {
-  animation: moteur-fade-in var(--m-glide) var(--ease-glide) both;
+  animation: moteur-fade-in var(--motion-glide) var(--ease-glide) both;
 }
 :root [data-moment~='dialog'][data-state='leaving'] {
-  --m-y: 4px;
-  --m-s: 1;
+  --leave-y: 4px;
   animation: moteur-leave min(160ms, var(--motion-cap)) ease-in forwards;
 }
 [data-moment~='dialog'][data-state='leaving']::backdrop,
@@ -1232,7 +1325,7 @@
     transform calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
     scale calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
     rotate calc(var(--spring-settle-duration) * var(--travel)) var(--spring-settle),
-    box-shadow var(--m-settle) var(--spring-settle);
+    box-shadow var(--motion-settle) var(--spring-settle);
 }
 [data-moment~='lift'][data-state='lifted'] {
   z-index: 1;
@@ -1242,7 +1335,7 @@
   transition:
     scale calc(var(--duration-snap) * var(--travel)) var(--ease-spring),
     rotate calc(var(--duration-snap) * var(--travel)) var(--ease-spring),
-    box-shadow var(--m-snap) var(--ease-spring);
+    box-shadow var(--motion-snap) var(--ease-spring);
 }
 :root[data-look='folio'] [data-moment~='lift'][data-state='lifted'] {
   scale: calc(1 + 0.015 * var(--travel));

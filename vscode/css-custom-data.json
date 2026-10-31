@@ -47,7 +47,7 @@
       "name": "--chocolate",
       "description": {
         "kind": "markdown",
-        "value": "Top bar, command palette shadow, toasts, code wells, the offline banner.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#0e0805`\n- Folio: Light `#ffffff`, Dark `#191d23`"
+        "value": "Top bar, command palette shadow, toasts, the offline banner. Code wells have --code.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#0e0805`\n- Folio: Light `#ffffff`, Dark `#191d23`"
       }
     },
     {
@@ -55,6 +55,48 @@
       "description": {
         "kind": "markdown",
         "value": "Sidebar ground; inputs inside the top bar.\n\n- Discothèque: Lights on `#5a3822`, Lights off `#160d07`\n- Folio: Light `#ffffff`, Dark `#191d23`"
+      }
+    },
+    {
+      "name": "--code",
+      "description": {
+        "kind": "markdown",
+        "value": "Code wells: blocks of code, terminals, requests and answers. Dark in both themes, so code reads the same everywhere.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#0e0805`\n- Folio: `#1a2029`"
+      }
+    },
+    {
+      "name": "--code-focus",
+      "description": {
+        "kind": "markdown",
+        "value": "The focus ring on controls inside a code well (draw it without --focus-edge there).\n\n- Discothèque: `#e1a730`\n- Folio: `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--code-function",
+      "description": {
+        "kind": "markdown",
+        "value": "Function names, numbers and constants in a code well.\n\n- Discothèque: `#f2b48f`\n- Folio: `#f0b37e`"
+      }
+    },
+    {
+      "name": "--code-keyword",
+      "description": {
+        "kind": "markdown",
+        "value": "Keywords, keys and the line being pointed at in a code well.\n\n- Discothèque: `#e1a730`\n- Folio: `#8db4f5`"
+      }
+    },
+    {
+      "name": "--code-rule",
+      "description": {
+        "kind": "markdown",
+        "value": "Lines between rows and panes inside a code well. Decorative only.\n\n- Discothèque: Lights on `#5a3822`, Lights off `#160d07`\n- Folio: `#2c3440`"
+      }
+    },
+    {
+      "name": "--code-string",
+      "description": {
+        "kind": "markdown",
+        "value": "Strings and values in a code well.\n\n- Discothèque: `#c9d98a`\n- Folio: `#7fd4a8`"
       }
     },
     {
@@ -230,6 +272,62 @@
       "description": {
         "kind": "markdown",
         "value": "Folio only. Page ground behind lists, the editor and settings. Discothèque role: paper.\n\n- Folio: Light `#f5f6f8`, Dark `#111418`"
+      }
+    },
+    {
+      "name": "--folio-code",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Code wells: blocks of code, terminals, requests and answers. Dark in both themes. Discothèque role: code.\n\n- Folio: `#1a2029`"
+      }
+    },
+    {
+      "name": "--folio-code-border",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Lines between rows and panes inside a code well. Decorative only.\n\n- Folio: `#2c3440`"
+      }
+    },
+    {
+      "name": "--folio-code-focus",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. The focus ring on controls inside a code well: the dark theme's focus, since the well is dark in both. Discothèque role: code-focus.\n\n- Folio: `#6ea0f2`"
+      }
+    },
+    {
+      "name": "--folio-code-function",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Function names, numbers and constants in a code well.\n\n- Folio: `#f0b37e`"
+      }
+    },
+    {
+      "name": "--folio-code-keyword",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Keywords, keys and the line being pointed at in a code well.\n\n- Folio: `#8db4f5`"
+      }
+    },
+    {
+      "name": "--folio-code-string",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Strings and values in a code well.\n\n- Folio: `#7fd4a8`"
+      }
+    },
+    {
+      "name": "--folio-code-text",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Code and plain text in a code well (≥13:1).\n\n- Folio: `#e8ebef`"
+      }
+    },
+    {
+      "name": "--folio-code-text-muted",
+      "description": {
+        "kind": "markdown",
+        "value": "Folio only. Comments, punctuation, line numbers and labels in a code well.\n\n- Folio: `#9aa4b2`"
       }
     },
     {
@@ -821,6 +919,20 @@
       }
     },
     {
+      "name": "--on-code",
+      "description": {
+        "kind": "markdown",
+        "value": "Code and plain text in a code well.\n\n- Discothèque: `#f7ebd0`\n- Folio: `#e8ebef`"
+      }
+    },
+    {
+      "name": "--on-code-muted",
+      "description": {
+        "kind": "markdown",
+        "value": "Comments, punctuation, line numbers and labels in a code well.\n\n- Discothèque: Lights on `#e9d6b0`, Lights off `#c9b28a`\n- Folio: `#9aa4b2`"
+      }
+    },
+    {
       "name": "--on-inverse",
       "description": {
         "kind": "markdown",
@@ -1231,6 +1343,132 @@
       "description": {
         "kind": "markdown",
         "value": "Reduced motion: the longest a fade or drawn line may last. Use `min(var(--duration-pop), var(--motion-cap))`.\n\n`100s`, `200ms` under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-snap",
+      "description": {
+        "kind": "markdown",
+        "value": "`--duration-snap` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.\n\nthe token, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-pop",
+      "description": {
+        "kind": "markdown",
+        "value": "`--spring-pop-duration` (pairs with `--spring-pop`) capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.\n\nthe token, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-settle",
+      "description": {
+        "kind": "markdown",
+        "value": "`--spring-settle-duration` (pairs with `--spring-settle`) capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.\n\nthe token, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-glide",
+      "description": {
+        "kind": "markdown",
+        "value": "`--duration-glide` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.\n\nthe token, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-drift",
+      "description": {
+        "kind": "markdown",
+        "value": "`--duration-drift` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.\n\nthe token, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-pen",
+      "description": {
+        "kind": "markdown",
+        "value": "`--duration-pen` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.\n\nthe token, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--motion-linger",
+      "description": {
+        "kind": "markdown",
+        "value": "Three drifts, capped by `--motion-cap`: how long something you just changed stays marked (`moteur-flash`).\n\n`calc(var(--duration-drift) * 3)`, `200ms` at most under reduced motion. Set by moments.css."
+      }
+    },
+    {
+      "name": "--flash",
+      "description": {
+        "kind": "markdown",
+        "value": "The fill of `moteur-flash` and the `flash` moment, for something you just changed. Set it on the element, or on a part of the page.\n\nDiscothèque `color-mix(in srgb, var(--mustard) 40%, transparent)`, Folio `var(--folio-accent-soft)`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--enter-x",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-enter` comes in from an offset along x, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`0px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--enter-y",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-enter` comes in from an offset along y, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`0px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--enter-scale",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-enter` comes in from a scale, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`1`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--enter-turn",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-enter` comes in from a turn, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`0deg`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--enter-opacity",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-enter` comes in from an opacity. Set it on the element that animates: it does not inherit.\n\n`0`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--leave-x",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-leave` goes out to an offset along x, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`0px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--leave-y",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-leave` goes out to an offset along y, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`0px`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--leave-scale",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-leave` goes out to a scale, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`1`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--leave-turn",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-leave` goes out to a turn, times `--travel`. Set it on the element that animates: it does not inherit.\n\n`0deg`. Set by moments.css."
+      }
+    },
+    {
+      "name": "--leave-opacity",
+      "description": {
+        "kind": "markdown",
+        "value": "`moteur-leave` goes out to an opacity. Set it on the element that animates: it does not inherit.\n\n`0`. Set by moments.css."
       }
     },
     {

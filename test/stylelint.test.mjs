@@ -76,3 +76,55 @@ test('keyframes that move need --travel', async () => {
   // Fades and colours don't move anything.
   assert.deepEqual(await flags('@keyframes fade { from { opacity: 0; } }'), []);
 });
+
+test('the public arrival, leaving and flash pass when used the documented way', async () => {
+  assert.deepEqual(
+    await flags(
+      'a { --enter-y: 8px; --enter-turn: -1deg; --enter-scale: 0.97; animation: moteur-enter var(--motion-pop) var(--spring-pop) both; }',
+    ),
+    [],
+  );
+  assert.deepEqual(
+    await flags(
+      'a { --leave-y: 6px; animation: moteur-leave var(--motion-snap) var(--ease-glide) forwards; }',
+    ),
+    [],
+  );
+  // A plain token as a delay is timing, not the fade.
+  assert.deepEqual(
+    await flags(
+      'a { --flash: var(--mustard); animation: moteur-flash var(--motion-linger) var(--ease-drift) var(--duration-drift) backwards, x var(--duration-glide) ease; }',
+    ),
+    [],
+  );
+  assert.deepEqual(
+    await flags(
+      'a { animation-name: moteur-enter, own; animation-duration: var(--motion-settle), var(--duration-glide); }',
+    ),
+    [],
+  );
+});
+
+test('moments.css keyframes with an uncapped or raw duration are flagged', async () => {
+  assert.deepEqual(
+    await flags('a { animation: moteur-enter var(--spring-pop-duration) var(--spring-pop); }'),
+    ['moteur/motion-tokens'],
+  );
+  assert.deepEqual(await flags('a { animation: moteur-flash var(--duration-glide) ease; }'), [
+    'moteur/motion-tokens',
+  ]);
+  assert.deepEqual(
+    await flags('a { animation-name: moteur-leave; animation-duration: var(--duration-snap); }'),
+    ['moteur/motion-tokens'],
+  );
+  assert.deepEqual(await flags('a { animation: moteur-enter 300ms ease; }'), [
+    'moteur/motion-tokens',
+  ]);
+  // A keyframe of one's own that moves without --travel is still caught.
+  assert.deepEqual(
+    await flags(
+      '@keyframes arrive { from { transform: translate(var(--enter-x), var(--enter-y)); } }',
+    ),
+    ['moteur/keyframes-travel'],
+  );
+});

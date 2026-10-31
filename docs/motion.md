@@ -64,6 +64,55 @@ When someone asks for less motion (the system setting, or `data-motion="reduce"`
 
 `data-motion="full"` on `<html>` ignores the system setting (for a "Motion: full" preference).
 
+### Capped durations
+
+`moments.css` also gives each duration token with the cap already applied, so an animation that
+fades or draws needs no `min()` of its own:
+
+| Variable          | Is                                 | Pairs with                     |
+| ----------------- | ---------------------------------- | ------------------------------ |
+| `--motion-snap`   | `--duration-snap`, capped          | `--ease-spring`                |
+| `--motion-pop`    | `--spring-pop-duration`, capped    | `--spring-pop`                 |
+| `--motion-settle` | `--spring-settle-duration`, capped | `--spring-settle`              |
+| `--motion-glide`  | `--duration-glide`, capped         | `--ease-glide`                 |
+| `--motion-drift`  | `--duration-drift`, capped         | `--ease-drift`, `--ease-glide` |
+| `--motion-pen`    | `--duration-pen`, capped           | `--ease-pen`                   |
+| `--motion-linger` | three drifts, capped               | `--ease-drift`                 |
+
+They are separate variables, rather than the tokens themselves turning short under reduced
+motion, because the plain tokens also time things that must not shrink: delays, staggers and
+distances multiplied by `--travel`. Take a `--motion-*` duration for anything with a fade or a
+drawn line in it, and the plain token for a delay or for `calc(var(--duration-glide) *
+var(--travel))`. Like the cap, they follow the page's look.
+
+### Arriving and leaving
+
+Most things that appear or go away do it the same way: from a little offset, a scale or a turn,
+with a fade. `moments.css` has the two keyframes its own moments use, for component CSS too:
+
+```css
+.chip {
+  --enter-y: 6px;
+  --enter-scale: 0.97;
+  animation: moteur-enter var(--motion-pop) var(--spring-pop) both;
+}
+.chip[data-closing] {
+  --leave-y: 4px;
+  animation: moteur-leave var(--motion-snap) var(--ease-glide) forwards;
+}
+```
+
+| Keyframe       | Moves                                                                                                                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `moteur-enter` | in from `--enter-x`, `--enter-y` (`0px`), `--enter-scale` (`1`), `--enter-turn` (`0deg`) and `--enter-opacity` (`0`) |
+| `moteur-leave` | out to `--leave-x`, `--leave-y`, `--leave-scale`, `--leave-turn` and `--leave-opacity`, with the same defaults       |
+| `moteur-flash` | the background from `--flash` back to its own (see the `flash` moment)                                               |
+
+Offsets, scales and turns are multiplied by `--travel`, so under reduced motion only the fade is
+left. The `--enter-*` and `--leave-*` properties don't inherit: set them on the element that
+animates, and a toast's offset never reaches a badge inside it. One element can set both, for its
+way in and its way out.
+
 Never end animations instantly with `animation-duration: 0.01ms !important`: it makes timers
 fire at once and closes toasts before anyone sees them.
 
@@ -78,6 +127,10 @@ durations and curves, and keyframes that move without `--travel`.
   time is a micro-interaction, not a moment.
 - Every moment says something in words too (a label, a toast, `aria-live`). Motion is never the
   only signal.
+- A `flash` marks what changed where you weren't looking: the slug a title rewrote, the row a
+  dialog updated. The thing you clicked already answers with its own press or tick, so it doesn't
+  flash too, and nothing flashes and gets a `change-mark` at once: a flash is your change, a
+  change-mark someone else's.
 
 ## The catalogue
 
@@ -96,21 +149,23 @@ and `data-part="ink"`.
 Moments move things with `transform` and set the `animation` or `transition` of the elements they
 name. Position those elements with `translate` or `inset`, and leave their animation and
 transition to the moment. Settings are CSS variables a component can set on its own element.
-Names starting with `--m-` are internal.
+Names starting with `--m-` are internal, and so are the `moteur-` keyframes other than the three
+in [Arriving and leaving](#arriving-and-leaving).
 
 ### Micro-interactions
 
-| Name          | Lives in                  | Markup and states                                                                                                                                                                                                                                                                                                                                                    |
-| ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `press`       | Button                    | `data-moment="press"`; reacts to `:active` and `data-pressed`. Discothèque presses into its shadow (`--press`; set it lower on a button without one), Folio sinks 1 px and darkens a shade. Lands in 90 ms and lets go 90 ms later at the earliest. `data-state="busy"` shows the busy cue: stripes roll inside (Discothèque), a line runs along the bottom (Folio). |
-| `switch`      | Switch                    | part `thumb`, on/off from `aria-checked` (or a checked input inside); the thumb stretches while pressed (6 px / 4 px), then lands with `--spring-pop`. Settings: `--switch-thumb`, `--switch-travel`, `--switch-stretch`.                                                                                                                                            |
-| `slide`       | Segmented, Tabs           | part `indicator`, placed by `slide()` through `--x` and `--w`; glides between options.                                                                                                                                                                                                                                                                               |
-| `field-error` | TextField, every field    | on the box around the input; `data-invalid`: Discothèque shakes once, Folio draws a rust line under the field. Part `message` (inside, or a sibling after it) drops in (Folio: rises).                                                                                                                                                                               |
-| `save`        | SaveButton                | `data-state="dirty\|busy\|done\|failed"`; dirty shows a dot (part `dot`) that pings once, busy shows the busy cue, done draws a tick (part `ink`), failed shakes (Folio: a rust line along the bottom). `data-shortcut` flashes the press when ⌘S was used. This is also the unsaved state and the ⌘S press.                                                         |
-| `copied`      | CopyButton                | part `icon` holds the copy glyph and the tick's SVG (the one with part `ink`) in one centred cell; `data-state="done"` swaps them and draws the tick. Part `tag` ("Copied") rises and fades after a second.                                                                                                                                                          |
-| `counter`     | Count, Badge              | `count(el, value)` rolls the digits that changed; it fills the element with digit columns (part `digit`), so the element holds only the number.                                                                                                                                                                                                                      |
-| `code-cells`  | CodeField                 | parts `cell` (`data-filled`), each holding its digit in a child element; `data-state="done"` closes the gaps and draws a tick; `failed` shakes or edges in rust, then the digits leave right to left (clear them after about 1 s).                                                                                                                                   |
-| `hold`        | Button `intent="destroy"` | `hold(button, {ms, onConfirm})`; part `fill` grows while held, drains if released early. The button gets `data-state="busy"` while held and `done` at the end.                                                                                                                                                                                                       |
+| Name          | Lives in                  | Markup and states                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `press`       | Button                    | `data-moment="press"`; reacts to `:active` and `data-pressed`. Discothèque presses into its shadow (`--press`; set it lower on a button without one), Folio sinks 1 px and darkens a shade. Lands in 90 ms and lets go 90 ms later at the earliest. `data-state="busy"` shows the busy cue: stripes roll inside (Discothèque), a line runs along the bottom (Folio).                                                                               |
+| `switch`      | Switch                    | part `thumb`, on/off from `aria-checked` (or a checked input inside); the thumb stretches while pressed (6 px / 4 px), then lands with `--spring-pop`. Settings: `--switch-thumb`, `--switch-travel`, `--switch-stretch`.                                                                                                                                                                                                                          |
+| `slide`       | Segmented, Tabs           | part `indicator`, placed by `slide()` through `--x` and `--w`; glides between options.                                                                                                                                                                                                                                                                                                                                                             |
+| `field-error` | TextField, every field    | on the box around the input; `data-invalid`: Discothèque shakes once, Folio draws a rust line under the field. Part `message` (inside, or a sibling after it) drops in (Folio: rises).                                                                                                                                                                                                                                                             |
+| `save`        | SaveButton                | `data-state="dirty\|busy\|done\|failed"`; dirty shows a dot (part `dot`) that pings once, busy shows the busy cue, done draws a tick (part `ink`), failed shakes (Folio: a rust line along the bottom). `data-shortcut` flashes the press when ⌘S was used. This is also the unsaved state and the ⌘S press.                                                                                                                                       |
+| `copied`      | CopyButton                | part `icon` holds the copy glyph and the tick's SVG (the one with part `ink`) in one centred cell; `data-state="done"` swaps them and draws the tick. Part `tag` ("Copied") rises and fades after a second.                                                                                                                                                                                                                                        |
+| `counter`     | Count, Badge              | `count(el, value)` rolls the digits that changed; it fills the element with digit columns (part `digit`), so the element holds only the number.                                                                                                                                                                                                                                                                                                    |
+| `code-cells`  | CodeField                 | parts `cell` (`data-filled`), each holding its digit in a child element; `data-state="done"` closes the gaps and draws a tick; `failed` shakes or edges in rust, then the digits leave right to left (clear them after about 1 s).                                                                                                                                                                                                                 |
+| `hold`        | Button `intent="destroy"` | `hold(button, {ms, onConfirm})`; part `fill` grows while held, drains if released early. The button gets `data-state="busy"` while held and `done` at the end.                                                                                                                                                                                                                                                                                     |
+| `flash`       | Anything you just changed | something you just changed, away from where you clicked, when added or with `flash(el)` (which plays it again on an element already marked): the background takes `--flash` and fades back to its own. Discothèque hits at once in marigold, holds a beat and fades over three drifts; Folio's pale wash soaks in like ink, then dries. Under reduced motion the colour still shows and fades in 200 ms. Someone else's change is a `change-mark`. |
 
 ### Moments
 
@@ -119,7 +174,7 @@ Names starting with `--m-` are internal.
 | `toast`       | Toast               | enters from below; part `timer` is the clock (`--toast-time`, 5 s): `toastTimer(el)` resolves when its bar runs out and pauses on hover and focus. `data-state="leaving"` exits; remove the toast on `animationend`.                                                                                                                |
 | `stamp`       | Stamp (Discothèque) | thuds down with a slight turn when added, and lifts off after 1.8 s; the page gives a 2 px jolt (`data-moment="thud"` on the container, which jolts when a stamp lands in it or on `data-state="done"`).                                                                                                                            |
 | `seal`        | StatusPill          | Folio's publish, and approve and schedule in both looks. `data-state="done"`: part `fill` sweeps in, the `ink` writes itself in order (a ring, then a tick), part `rays` sparks once, part `edge` draws down the card, part `label` firms up, part `badge` pops onto an avatar. `failed` (changes asked) does the same without ink. |
-| `change-mark` | ChangeMark          | something someone else just changed, when added: part `bar` draws down the edge, part `highlight` sweeps the words, then both fade over about 4 s.                                                                                                                                                                                  |
+| `change-mark` | ChangeMark          | something someone else just changed (yours is a `flash`), when added: part `bar` draws down the edge, part `highlight` sweeps the words, then both fade over about 4 s.                                                                                                                                                             |
 | `milestone`   | Celebration         | first publish and other firsts, when added: part `card` lands, its `ink` seal draws, one burst: ten strips in part `confetti` (Discothèque) or part `rays` (Folio). `data-state="leaving"` fades it.                                                                                                                                |
 | `arrival`     | PresenceStack       | someone joins: their avatar slides into the stack, then part `ring` pings three times (Discothèque) or its `ink` circle draws itself around the avatar (Folio).                                                                                                                                                                     |
 | `curtain`     | Sign-in page        | `data-state="done"` when signed in: the five children of part `bands` sweep up and lift away (Discothèque); part `card` steps back and part `view` (the Studio) rises (Folio).                                                                                                                                                      |
@@ -155,6 +210,7 @@ import {
   spring,
   slide,
   count,
+  flash,
   hold,
   toastTimer,
   flight,
@@ -171,6 +227,7 @@ import {
 | `spring(name)`                  | `{duration, easing}` of `pop`, `settle` or `pen` in the current look.                                                                                                                                |
 | `slide(indicator, target)`      | moves a `slide` indicator to `target` (sets `--x` and `--w`).                                                                                                                                        |
 | `count(el, value)`              | rolls a `counter` to `value`; returns a promise.                                                                                                                                                     |
+| `flash(el)`                     | marks `el` with the `flash` moment, or plays it again if it's already marked; resolves when the colour has faded.                                                                                    |
 | `hold(button, {ms, onConfirm})` | press and hold to confirm, with Space and Enter; returns a cleanup function.                                                                                                                         |
 | `toastTimer(el)`                | resolves when the toast's timer bar runs out; the timer is the animation, so hovering pauses both.                                                                                                   |
 | `flight(from, to)`              | flies `from`'s look into `to` (a cross-fading ghost); waits while one flight is still running.                                                                                                       |

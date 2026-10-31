@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+- The arrival is public: `moteur-enter` and `moteur-leave`, set with `--enter-x`, `--enter-y`,
+  `--enter-scale`, `--enter-turn`, `--enter-opacity` and their `--leave-*` twins (registered, so
+  they don't inherit), and `--motion-snap`, `--motion-pop`, `--motion-settle`, `--motion-glide`,
+  `--motion-drift`, `--motion-pen` and `--motion-linger`, the duration tokens with
+  `--motion-cap` applied. They replace the internal `--m-x`, `--m-y`, `--m-s`, `--m-r`, `--m-o`
+  and `--m-snap` to `--m-pen`. `moteur-leave` can now turn and keep some opacity too.
+- The `flash` moment, for something you just changed: its background takes `--flash` and fades
+  (Discothèque hits in marigold; Folio's wash soaks in and dries), and still shows under reduced
+  motion. `flash(el)` in the helper plays it, again on an element already marked; the
+  `moteur-flash` keyframe is public for use outside the moment.
+- `moteur/motion-tokens` flags an uncapped duration token on a `moteur-` keyframe, such as
+  `moteur-enter var(--spring-pop-duration)`, and says which `--motion-*` to use.
+- Code wells: `--code`, `--on-code`, `--on-code-muted`, `--code-rule`, `--code-keyword`,
+  `--code-string`, `--code-function` and `--code-focus`, a dark panel for code in both looks and
+  both themes, with its syntax colours (Folio's names: `code`, `code-text` and so on). Their
+  contrast pairs are checked, and `--code-focus` is the focus ring inside a well: Folio's light
+  `--focus` was 2.7:1 there.
+- `@moteurio/design/contrast`: the contrast checker's `ratio(fg, bg)` and `shown(ratio)`, so an
+  app can check colour pairs of its own the same way.
+- Folio on part of a page: `data-look="folio"` on any element gives it Folio's variables whatever
+  the page's look, in the page's theme or in its own `data-theme`. Moments keep the page's look.
 - `pnpm check` checks colour contrast: the pairs in `tokens/contrast.json`, in both looks and both
   themes, measured on the values the generated CSS gives each variable. The contrast tables in
   `docs/foundations.md` are written from the same list.

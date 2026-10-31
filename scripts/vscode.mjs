@@ -60,6 +60,78 @@ const MOTION_VARIABLES = {
     'Reduced motion: the longest a fade or drawn line may last. Use `min(var(--duration-pop), var(--motion-cap))`.',
     '`100s`, `200ms` under reduced motion',
   ],
+  'motion-snap': [
+    '`--duration-snap` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.',
+    'the token, `200ms` at most under reduced motion',
+  ],
+  'motion-pop': [
+    '`--spring-pop-duration` (pairs with `--spring-pop`) capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.',
+    'the token, `200ms` at most under reduced motion',
+  ],
+  'motion-settle': [
+    '`--spring-settle-duration` (pairs with `--spring-settle`) capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.',
+    'the token, `200ms` at most under reduced motion',
+  ],
+  'motion-glide': [
+    '`--duration-glide` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.',
+    'the token, `200ms` at most under reduced motion',
+  ],
+  'motion-drift': [
+    '`--duration-drift` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.',
+    'the token, `200ms` at most under reduced motion',
+  ],
+  'motion-pen': [
+    '`--duration-pen` capped by `--motion-cap`: the duration for an animation that fades or draws, such as `moteur-enter`.',
+    'the token, `200ms` at most under reduced motion',
+  ],
+  'motion-linger': [
+    'Three drifts, capped by `--motion-cap`: how long something you just changed stays marked (`moteur-flash`).',
+    '`calc(var(--duration-drift) * 3)`, `200ms` at most under reduced motion',
+  ],
+  flash: [
+    'The fill of `moteur-flash` and the `flash` moment, for something you just changed. Set it on the element, or on a part of the page.',
+    'Discothèque `color-mix(in srgb, var(--mustard) 40%, transparent)`, Folio `var(--folio-accent-soft)`',
+  ],
+  'enter-x': [
+    '`moteur-enter` comes in from an offset along x, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`0px`',
+  ],
+  'enter-y': [
+    '`moteur-enter` comes in from an offset along y, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`0px`',
+  ],
+  'enter-scale': [
+    '`moteur-enter` comes in from a scale, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`1`',
+  ],
+  'enter-turn': [
+    '`moteur-enter` comes in from a turn, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`0deg`',
+  ],
+  'enter-opacity': [
+    '`moteur-enter` comes in from an opacity. Set it on the element that animates: it does not inherit.',
+    '`0`',
+  ],
+  'leave-x': [
+    '`moteur-leave` goes out to an offset along x, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`0px`',
+  ],
+  'leave-y': [
+    '`moteur-leave` goes out to an offset along y, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`0px`',
+  ],
+  'leave-scale': [
+    '`moteur-leave` goes out to a scale, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`1`',
+  ],
+  'leave-turn': [
+    '`moteur-leave` goes out to a turn, times `--travel`. Set it on the element that animates: it does not inherit.',
+    '`0deg`',
+  ],
+  'leave-opacity': [
+    '`moteur-leave` goes out to an opacity. Set it on the element that animates: it does not inherit.',
+    '`0`',
+  ],
   'switch-thumb': [
     "`switch` moment setting: the thumb's size.",
     'Discothèque `20px`, Folio `16px`',
