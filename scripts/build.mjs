@@ -213,6 +213,8 @@ ${themed(
     mustard: 'accent-soft',
     'on-mustard': 'accent-text',
     'mustard-soft': 'warning-soft',
+    'panel-highlight': 'accent-soft',
+    'on-panel-highlight': 'accent-text',
     orange: 'accent',
     action: 'accent',
     'on-action': 'on-accent',
@@ -240,6 +242,8 @@ ${themed(
     ['shadow-dialog', s('shadow-l', theme)],
     ['shadow-drag', s('shadow-drag', theme)],
     ['shadow-highlight', `0 0 0 3px ${c('accent-soft', theme)}`],
+    // A highlighted panel is a tinted surface in Folio; shadows are for things that float.
+    ['shadow-panel-highlight', 'none'],
     // Folio's own names, for the few component rules that differ by more than colour.
     ...folio.color.tokens.map((t) => [`folio-${t.name}`, c(t.name, theme)]),
     ...folio.shadow.tokens.map((t) => [`folio-${t.name}`, s(t.name, theme)]),

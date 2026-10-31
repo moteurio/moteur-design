@@ -73,47 +73,65 @@ exists in Folio alone.
 
 ### Action, selection and status
 
-| Variable         | Means                                                                                                 | Folio role     |
-| ---------------- | ----------------------------------------------------------------------------------------------------- | -------------- |
-| `--action`       | Primary buttons (Publish, Save, New). Pair with `--on-action`.                                        | `accent`       |
-| `--on-action`    | Text on `--action`.                                                                                   | `on-accent`    |
-| `--mustard`      | Selection and "needs you": the selected item, review state, highlights. Discothèque's signature fill. | `accent-soft`  |
-| `--on-mustard`   | Text on `--mustard`.                                                                                  | `accent-text`  |
-| `--mustard-soft` | Inserted text in diffs, freshly added rows, warning suggestions.                                      | `warning-soft` |
-| `--orange`       | Decoration only: display italics at 28px and up, stripes, cursors. Never small text.                  | `accent`       |
-| `--rust`         | Danger and errors: text on paper, deletions in diffs. Also Discothèque's link colour.                 | `danger`       |
-| `--rust-soft`    | Background of blocking problems and deleted text.                                                     | `danger-soft`  |
-| `--avocado`      | Large fills for "live" and success areas (tiles, stubs). Text on it is large and `--on-avocado`.      | `success`      |
-| `--on-avocado`   | Large text on `--avocado`.                                                                            | `on-success`   |
-| `--success`      | Live status and success buttons; success text.                                                        | `success`      |
-| `--success-soft` | Background of live pills and "all caught up" notices.                                                 | `success-soft` |
-| `--warning-ink`  | Warning text: suggestions, counters near their limit.                                                 | `warning`      |
-| `--teal`         | Scheduled and informational.                                                                          | `info`         |
-| `--teal-soft`    | Background of scheduled pills and info notes.                                                         | `info-soft`    |
-| `--plum`         | The sixth presence colour. Never a status.                                                            | `presence-6`   |
-| `--on-plum`      | Text on plum and teal fills.                                                                          | `on-presence`  |
-| `--focus`        | The focus ring.                                                                                       | `focus`        |
+| Variable               | Means                                                                                                            | Folio role     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------- |
+| `--action`             | Primary buttons (Publish, Save, New). Pair with `--on-action`.                                                   | `accent`       |
+| `--on-action`          | Text on `--action`.                                                                                              | `on-accent`    |
+| `--mustard`            | Selection and small highlights: the selected item, counts, review state. Discothèque's signature fill.           | `accent-soft`  |
+| `--on-mustard`         | Text on `--mustard`.                                                                                             | `accent-text`  |
+| `--mustard-soft`       | Inserted text in diffs, freshly added rows, warning suggestions.                                                 | `warning-soft` |
+| `--panel-highlight`    | A big panel that calls for you ("needs you", getting started). Mustard in Lights on, mustard-soft in Lights off. | `accent-soft`  |
+| `--on-panel-highlight` | Text on `--panel-highlight`.                                                                                     | `accent-text`  |
+| `--orange`             | Decoration only: display italics at 28px and up, stripes, cursors. Never small text.                             | `accent`       |
+| `--rust`               | Danger and errors: text on paper, deletions in diffs. Also Discothèque's link colour.                            | `danger`       |
+| `--rust-soft`          | Background of blocking problems and deleted text.                                                                | `danger-soft`  |
+| `--avocado`            | Large fills for "live" and success areas (tiles, stubs). Text on it is large and `--on-avocado`.                 | `success`      |
+| `--on-avocado`         | Large text on `--avocado`.                                                                                       | `on-success`   |
+| `--success`            | Live status and success buttons; success text.                                                                   | `success`      |
+| `--success-soft`       | Background of live pills and "all caught up" notices.                                                            | `success-soft` |
+| `--warning-ink`        | Warning text: suggestions, counters near their limit.                                                            | `warning`      |
+| `--teal`               | Scheduled and informational.                                                                                     | `info`         |
+| `--teal-soft`          | Background of scheduled pills and info notes.                                                                    | `info-soft`    |
+| `--plum`               | The sixth presence colour. Never a status.                                                                       | `presence-6`   |
+| `--on-plum`            | Text on plum and teal fills.                                                                                     | `on-presence`  |
+| `--focus`              | The focus ring.                                                                                                  | `focus`        |
 
-| Variable         | Discothèque light | Discothèque dark | Folio light | Folio dark |
-| ---------------- | ----------------- | ---------------- | ----------- | ---------- |
-| `--action`       | `#B8491A`         | `#E57A47`        | `#1F5FC4`   | `#6EA0F2`  |
-| `--on-action`    | `#FFFFFF`         | `#1C110A`        | `#FFFFFF`   | `#0D1014`  |
-| `--mustard`      | `#E1A730`         | `#E1A730`        | `#E8F0FC`   | `#17253B`  |
-| `--on-mustard`   | `#3B2416`         | `#3B2416`        | `#1C56B3`   | `#8DB4F5`  |
-| `--mustard-soft` | `#FFF1C7`         | `#3A2A0C`        | `#FFF4DB`   | `#33270D`  |
-| `--orange`       | `#D9622B`         | `#E57A47`        | `#1F5FC4`   | `#6EA0F2`  |
-| `--rust`         | `#A8401A`         | `#F0A27A`        | `#B42318`   | `#F2877D`  |
-| `--rust-soft`    | `#FBE6DC`         | `#3B1A0E`        | `#FDECEA`   | `#3A1714`  |
-| `--avocado`      | `#7A8B3A`         | `#9DB050`        | `#18794E`   | `#5CC08F`  |
-| `--on-avocado`   | `#3B2416`         | `#1C110A`        | `#FFFFFF`   | `#0D1014`  |
-| `--success`      | `#56651F`         | `#9DB050`        | `#18794E`   | `#5CC08F`  |
-| `--success-soft` | `#E7EDCF`         | `#232B10`        | `#E6F4EC`   | `#12301F`  |
-| `--warning-ink`  | `#8F5C00`         | `#E1A730`        | `#8A5A00`   | `#E5B454`  |
-| `--teal`         | `#1F4B5A`         | `#7FB3C4`        | `#0B6E85`   | `#5EC2DA`  |
-| `--teal-soft`    | `#DCEBEF`         | `#10262E`        | `#E2F3F7`   | `#10292F`  |
-| `--plum`         | `#7A3B5A`         | `#D9A0BC`        | `#7A3FA0`   | `#C59BE0`  |
-| `--on-plum`      | `#FFFFFF`         | `#1C110A`        | `#FFFFFF`   | `#0D1014`  |
-| `--focus`        | `#E1A730`         | `#E1A730`        | `#1F5FC4`   | `#6EA0F2`  |
+| Variable               | Discothèque light | Discothèque dark | Folio light | Folio dark |
+| ---------------------- | ----------------- | ---------------- | ----------- | ---------- |
+| `--action`             | `#B8491A`         | `#E57A47`        | `#1F5FC4`   | `#6EA0F2`  |
+| `--on-action`          | `#FFFFFF`         | `#1C110A`        | `#FFFFFF`   | `#0D1014`  |
+| `--mustard`            | `#E1A730`         | `#E1A730`        | `#E8F0FC`   | `#17253B`  |
+| `--on-mustard`         | `#3B2416`         | `#3B2416`        | `#1C56B3`   | `#8DB4F5`  |
+| `--mustard-soft`       | `#FFF1C7`         | `#3A2A0C`        | `#FFF4DB`   | `#33270D`  |
+| `--panel-highlight`    | `#E1A730`         | `#3A2A0C`        | `#E8F0FC`   | `#17253B`  |
+| `--on-panel-highlight` | `#3B2416`         | `#F7EBD0`        | `#1C56B3`   | `#8DB4F5`  |
+| `--orange`             | `#D9622B`         | `#E57A47`        | `#1F5FC4`   | `#6EA0F2`  |
+| `--rust`               | `#A8401A`         | `#F0A27A`        | `#B42318`   | `#F2877D`  |
+| `--rust-soft`          | `#FBE6DC`         | `#3B1A0E`        | `#FDECEA`   | `#3A1714`  |
+| `--avocado`            | `#7A8B3A`         | `#9DB050`        | `#18794E`   | `#5CC08F`  |
+| `--on-avocado`         | `#3B2416`         | `#1C110A`        | `#FFFFFF`   | `#0D1014`  |
+| `--success`            | `#56651F`         | `#9DB050`        | `#18794E`   | `#5CC08F`  |
+| `--success-soft`       | `#E7EDCF`         | `#232B10`        | `#E6F4EC`   | `#12301F`  |
+| `--warning-ink`        | `#8F5C00`         | `#E1A730`        | `#8A5A00`   | `#E5B454`  |
+| `--teal`               | `#1F4B5A`         | `#7FB3C4`        | `#0B6E85`   | `#5EC2DA`  |
+| `--teal-soft`          | `#DCEBEF`         | `#10262E`        | `#E2F3F7`   | `#10292F`  |
+| `--plum`               | `#7A3B5A`         | `#D9A0BC`        | `#7A3FA0`   | `#C59BE0`  |
+| `--on-plum`            | `#FFFFFF`         | `#1C110A`        | `#FFFFFF`   | `#0D1014`  |
+| `--focus`              | `#E1A730`         | `#E1A730`        | `#1F5FC4`   | `#6EA0F2`  |
+
+Mustard is for small things: a selection, a count, a highlight, a button. A big panel that calls
+for you takes `--panel-highlight` with `--on-panel-highlight` and `--shadow-panel-highlight`
+instead. In Lights on it is the same mustard; in Lights off, where a wall of mustard glares, it
+is mustard-soft with a mustard offset shadow, and the selections and counts inside it stay full
+mustard.
+
+```css
+.needs-you {
+  background: var(--panel-highlight);
+  color: var(--on-panel-highlight);
+  box-shadow: var(--shadow-panel-highlight);
+}
+```
 
 ### Roles that differ by look
 
@@ -187,58 +205,60 @@ needs (4.5:1 for text, 3:1 for large text and for focus rings and the edges of c
 
 <!-- contrast-pairs: written by pnpm build from tokens/contrast.json -->
 
-| Text or mark                | On                 | Needs | Discothèque | Folio       | Safe for                       |
-| --------------------------- | ------------------ | ----- | ----------- | ----------- | ------------------------------ |
-| `--ink`                     | `--paper`          | 4.5:1 | 12.2 / 15.6 | 15.1 / 15.4 | any text                       |
-| `--ink`                     | `--paper-raised`   | 4.5:1 | 13.9 / 14.1 | 16.3 / 14.1 | any text                       |
-| `--ink`                     | `--paper-sunk`     | 4.5:1 | 11.0 / 14.7 | 14.2 / 15.9 | any text                       |
-| `--ink`                     | `--paper-tint`     | 4.5:1 | 12.7 / 13.1 | 14.7 / 12.4 | any text                       |
-| `--ink`                     | `--field`          | 4.5:1 | 14.4 / 16.0 | 16.3 / 14.9 | typing                         |
-| `--ink-muted`               | `--paper`          | 4.5:1 | 6.3 / 9.0   | 6.4 / 8.7   | any text                       |
-| `--ink-muted`               | `--paper-raised`   | 4.5:1 | 7.2 / 8.1   | 7.0 / 7.9   | any text                       |
-| `--ink-muted`               | `--paper-sunk`     | 4.5:1 | 5.7 / 8.4   | 6.0 / 8.9   | any text                       |
-| `--ink-subtle`              | `--paper`          | 4.5:1 | 5.1 / 6.0   | 5.1 / 6.7   | any text (never the only copy) |
-| `--ink-subtle`              | `--paper-raised`   | 4.5:1 | 5.8 / 5.4   | 5.5 / 6.1   | any text (never the only copy) |
-| `--ink-subtle`              | `--field`          | 4.5:1 | 6.0 / 6.2   | 5.5 / 6.4   | placeholders                   |
-| `--link`                    | `--paper`          | 4.5:1 | 5.2 / 8.9   | 6.4 / 8.7   | links                          |
-| `--link`                    | `--paper-raised`   | 4.5:1 | 5.9 / 8.0   | 6.9 / 8.0   | links                          |
-| `--on-action`               | `--action`         | 4.5:1 | 5.2 / 6.3   | 6.0 / 7.2   | button labels                  |
-| `--on-mustard`              | `--mustard`        | 4.5:1 | 6.7 / 6.7   | 6.0 / 7.3   | any text                       |
-| `--rust`                    | `--paper`          | 4.5:1 | 5.2 / 8.9   | 6.0 / 7.5   | error text                     |
-| `--rust`                    | `--rust-soft`      | 4.5:1 | 5.1 / 7.5   | 5.7 / 6.5   | error text in a problem box    |
-| `--success`                 | `--paper`          | 4.5:1 | 5.4 / 7.7   | 5.0 / 8.2   | success text                   |
-| `--success`                 | `--success-soft`   | 4.5:1 | 5.3 / 6.1   | 4.7 / 6.3   | live pills                     |
-| `--on-action`               | `--success`        | 4.5:1 | 6.4 / 7.7   | 5.4 / 8.5   | success button labels          |
-| `--on-avocado`              | `--avocado`        | 3:1   | 3.8 / 7.7   | 5.4 / 8.5   | large text on avocado fills    |
-| `--warning-ink`             | `--paper`          | 4.5:1 | 4.7 / 8.6   | 5.4 / 9.6   | warning text                   |
-| `--warning-ink`             | `--mustard-soft`   | 4.5:1 | 5.0 / 6.4   | 5.4 / 7.6   | warning suggestions            |
-| `--teal`                    | `--paper`          | 4.5:1 | 8.0 / 8.0   | 5.4 / 8.9   | info text                      |
-| `--teal`                    | `--teal-soft`      | 4.5:1 | 7.7 / 6.8   | 5.1 / 7.3   | scheduled pills                |
-| `--on-plum`                 | `--plum`           | 4.5:1 | 8.0 / 8.5   | 6.8 / 8.2   | presence tabs                  |
-| `--on-plum`                 | `--teal`           | 4.5:1 | 9.4 / 8.0   | 5.8 / 9.2   | type squares                   |
-| `--on-chocolate`            | `--chocolate`      | 4.5:1 | 12.2 / 16.8 | 16.3 / 14.1 | top bar                        |
-| `--on-chocolate`            | `--chocolate-soft` | 4.5:1 | 8.7 / 16.2  | 16.3 / 14.1 | sidebar                        |
-| `--on-chocolate-muted`      | `--chocolate`      | 4.5:1 | 10.1 / 9.6  | 7.0 / 7.9   | secondary text in the top bar  |
-| `--on-inverse`              | `--inverse`        | 4.5:1 | 12.2 / 16.8 | 15.1 / 15.4 | toasts                         |
-| `--on-inverse-accent`       | `--inverse`        | 4.5:1 | 6.7 / 9.2   | 7.7 / 5.7   | the action word in a toast     |
-| `--on-code`                 | `--code`           | 4.5:1 | 12.2 / 16.8 | 13.6 / 13.6 | code                           |
-| `--on-code-muted`           | `--code`           | 4.5:1 | 10.1 / 9.6  | 6.4 / 6.4   | comments and labels in code    |
-| `--code-keyword`            | `--code`           | 4.5:1 | 6.7 / 9.2   | 7.7 / 7.7   | keywords in code               |
-| `--code-string`             | `--code`           | 4.5:1 | 9.5 / 13.0  | 9.2 / 9.2   | strings in code                |
-| `--code-function`           | `--code`           | 4.5:1 | 8.0 / 11.0  | 8.9 / 8.9   | function names in code         |
-| `--ink-line`                | `--field`          | 3:1   | 4.2 / 4.3   | 3.6 / 4.0   | input edges                    |
-| `--ink-line`                | `--paper`          | 3:1   | 3.6 / 4.2   | 3.3 / 4.1   | input edges                    |
-| `--ink-line`                | `--paper-sunk`     | 3:1   | 3.2 / 3.9   | 3.1 / 4.3   | input edges                    |
-| `--outline-control`         | `--paper`          | 3:1   | 12.2 / 15.6 | 3.3 / 4.1   | control edges                  |
-| `--outline-control`         | `--paper-raised`   | 3:1   | 13.9 / 14.1 | 3.6 / 3.8   | control edges                  |
-| `--focus`                   | `--focus-edge`     | 3:1   | 6.7 / 6.7   | n/a         | focus ring: the two bands      |
-| `--focus` or `--focus-edge` | `--paper`          | 3:1   | 12.2 / 8.6  | 5.5 / 7.0   | focus ring                     |
-| `--focus` or `--focus-edge` | `--paper-raised`   | 3:1   | 13.9 / 7.7  | 6.0 / 6.4   | focus ring                     |
-| `--focus` or `--focus-edge` | `--paper-sunk`     | 3:1   | 11.0 / 8.1  | 5.2 / 7.2   | focus ring                     |
-| `--focus` or `--focus-edge` | `--field`          | 3:1   | 14.4 / 8.8  | 6.0 / 6.7   | focus ring                     |
-| `--focus` or `--focus-edge` | `--chocolate`      | 3:1   | 6.7 / 9.2   | 6.0 / 6.4   | focus ring                     |
-| `--focus` or `--focus-edge` | `--chocolate-soft` | 3:1   | 4.8 / 8.9   | 6.0 / 6.4   | focus ring                     |
-| `--code-focus`              | `--code`           | 3:1   | 6.7 / 9.2   | 6.2 / 6.2   | focus ring in a code well      |
+| Text or mark                | On                  | Needs | Discothèque | Folio       | Safe for                       |
+| --------------------------- | ------------------- | ----- | ----------- | ----------- | ------------------------------ |
+| `--ink`                     | `--paper`           | 4.5:1 | 12.2 / 15.6 | 15.1 / 15.4 | any text                       |
+| `--ink`                     | `--paper-raised`    | 4.5:1 | 13.9 / 14.1 | 16.3 / 14.1 | any text                       |
+| `--ink`                     | `--paper-sunk`      | 4.5:1 | 11.0 / 14.7 | 14.2 / 15.9 | any text                       |
+| `--ink`                     | `--paper-tint`      | 4.5:1 | 12.7 / 13.1 | 14.7 / 12.4 | any text                       |
+| `--ink`                     | `--field`           | 4.5:1 | 14.4 / 16.0 | 16.3 / 14.9 | typing                         |
+| `--ink-muted`               | `--paper`           | 4.5:1 | 6.3 / 9.0   | 6.4 / 8.7   | any text                       |
+| `--ink-muted`               | `--paper-raised`    | 4.5:1 | 7.2 / 8.1   | 7.0 / 7.9   | any text                       |
+| `--ink-muted`               | `--paper-sunk`      | 4.5:1 | 5.7 / 8.4   | 6.0 / 8.9   | any text                       |
+| `--ink-subtle`              | `--paper`           | 4.5:1 | 5.1 / 6.0   | 5.1 / 6.7   | any text (never the only copy) |
+| `--ink-subtle`              | `--paper-raised`    | 4.5:1 | 5.8 / 5.4   | 5.5 / 6.1   | any text (never the only copy) |
+| `--ink-subtle`              | `--field`           | 4.5:1 | 6.0 / 6.2   | 5.5 / 6.4   | placeholders                   |
+| `--link`                    | `--paper`           | 4.5:1 | 5.2 / 8.9   | 6.4 / 8.7   | links                          |
+| `--link`                    | `--paper-raised`    | 4.5:1 | 5.9 / 8.0   | 6.9 / 8.0   | links                          |
+| `--on-action`               | `--action`          | 4.5:1 | 5.2 / 6.3   | 6.0 / 7.2   | button labels                  |
+| `--on-mustard`              | `--mustard`         | 4.5:1 | 6.7 / 6.7   | 6.0 / 7.3   | any text                       |
+| `--on-panel-highlight`      | `--panel-highlight` | 4.5:1 | 6.7 / 11.7  | 6.0 / 7.3   | any text                       |
+| `--rust`                    | `--paper`           | 4.5:1 | 5.2 / 8.9   | 6.0 / 7.5   | error text                     |
+| `--rust`                    | `--rust-soft`       | 4.5:1 | 5.1 / 7.5   | 5.7 / 6.5   | error text in a problem box    |
+| `--success`                 | `--paper`           | 4.5:1 | 5.4 / 7.7   | 5.0 / 8.2   | success text                   |
+| `--success`                 | `--success-soft`    | 4.5:1 | 5.3 / 6.1   | 4.7 / 6.3   | live pills                     |
+| `--on-action`               | `--success`         | 4.5:1 | 6.4 / 7.7   | 5.4 / 8.5   | success button labels          |
+| `--on-avocado`              | `--avocado`         | 3:1   | 3.8 / 7.7   | 5.4 / 8.5   | large text on avocado fills    |
+| `--warning-ink`             | `--paper`           | 4.5:1 | 4.7 / 8.6   | 5.4 / 9.6   | warning text                   |
+| `--warning-ink`             | `--mustard-soft`    | 4.5:1 | 5.0 / 6.4   | 5.4 / 7.6   | warning suggestions            |
+| `--teal`                    | `--paper`           | 4.5:1 | 8.0 / 8.0   | 5.4 / 8.9   | info text                      |
+| `--teal`                    | `--teal-soft`       | 4.5:1 | 7.7 / 6.8   | 5.1 / 7.3   | scheduled pills                |
+| `--on-plum`                 | `--plum`            | 4.5:1 | 8.0 / 8.5   | 6.8 / 8.2   | presence tabs                  |
+| `--on-plum`                 | `--teal`            | 4.5:1 | 9.4 / 8.0   | 5.8 / 9.2   | type squares                   |
+| `--on-chocolate`            | `--chocolate`       | 4.5:1 | 12.2 / 16.8 | 16.3 / 14.1 | top bar                        |
+| `--on-chocolate`            | `--chocolate-soft`  | 4.5:1 | 8.7 / 16.2  | 16.3 / 14.1 | sidebar                        |
+| `--on-chocolate-muted`      | `--chocolate`       | 4.5:1 | 10.1 / 9.6  | 7.0 / 7.9   | secondary text in the top bar  |
+| `--on-inverse`              | `--inverse`         | 4.5:1 | 12.2 / 16.8 | 15.1 / 15.4 | toasts                         |
+| `--on-inverse-accent`       | `--inverse`         | 4.5:1 | 6.7 / 9.2   | 7.7 / 5.7   | the action word in a toast     |
+| `--on-code`                 | `--code`            | 4.5:1 | 12.2 / 16.8 | 13.6 / 13.6 | code                           |
+| `--on-code-muted`           | `--code`            | 4.5:1 | 10.1 / 9.6  | 6.4 / 6.4   | comments and labels in code    |
+| `--code-keyword`            | `--code`            | 4.5:1 | 6.7 / 9.2   | 7.7 / 7.7   | keywords in code               |
+| `--code-string`             | `--code`            | 4.5:1 | 9.5 / 13.0  | 9.2 / 9.2   | strings in code                |
+| `--code-function`           | `--code`            | 4.5:1 | 8.0 / 11.0  | 8.9 / 8.9   | function names in code         |
+| `--ink-line`                | `--field`           | 3:1   | 4.2 / 4.3   | 3.6 / 4.0   | input edges                    |
+| `--ink-line`                | `--paper`           | 3:1   | 3.6 / 4.2   | 3.3 / 4.1   | input edges                    |
+| `--ink-line`                | `--paper-sunk`      | 3:1   | 3.2 / 3.9   | 3.1 / 4.3   | input edges                    |
+| `--outline-control`         | `--paper`           | 3:1   | 12.2 / 15.6 | 3.3 / 4.1   | control edges                  |
+| `--outline-control`         | `--paper-raised`    | 3:1   | 13.9 / 14.1 | 3.6 / 3.8   | control edges                  |
+| `--focus`                   | `--focus-edge`      | 3:1   | 6.7 / 6.7   | n/a         | focus ring: the two bands      |
+| `--focus` or `--focus-edge` | `--paper`           | 3:1   | 12.2 / 8.6  | 5.5 / 7.0   | focus ring                     |
+| `--focus` or `--focus-edge` | `--paper-raised`    | 3:1   | 13.9 / 7.7  | 6.0 / 6.4   | focus ring                     |
+| `--focus` or `--focus-edge` | `--paper-sunk`      | 3:1   | 11.0 / 8.1  | 5.2 / 7.2   | focus ring                     |
+| `--focus` or `--focus-edge` | `--panel-highlight` | 3:1   | 6.7 / 6.4   | 5.2 / 5.8   | focus ring                     |
+| `--focus` or `--focus-edge` | `--field`           | 3:1   | 14.4 / 8.8  | 6.0 / 6.7   | focus ring                     |
+| `--focus` or `--focus-edge` | `--chocolate`       | 3:1   | 6.7 / 9.2   | 6.0 / 6.4   | focus ring                     |
+| `--focus` or `--focus-edge` | `--chocolate-soft`  | 3:1   | 4.8 / 8.9   | 6.0 / 6.4   | focus ring                     |
+| `--code-focus`              | `--code`            | 3:1   | 6.7 / 9.2   | 6.2 / 6.2   | focus ring in a code well      |
 
 <!-- /contrast-pairs -->
 
@@ -394,13 +414,14 @@ The two looks lift things differently. Discothèque has no soft shadows: an obje
 a hard offset in ink, like card stock on a desk. Folio separates objects with borders first, and
 keeps soft, low shadows for things that float.
 
-| Variable             | Discothèque light                 | Discothèque dark              | Folio (light)                     | Use                                    |
-| -------------------- | --------------------------------- | ----------------------------- | --------------------------------- | -------------------------------------- |
-| `--shadow-press`     | `3px 3px 0 #3B2416`               | `3px 3px 0 #000000`           | `shadow-xs`                       | primary buttons at rest                |
-| `--shadow-lift`      | `4px 4px 0 #3B2416`               | `4px 4px 0 #000000`           | `shadow-s`                        | hovered cards, the selected nav item   |
-| `--shadow-dialog`    | `8px 8px 0 #3B2416`               | `8px 8px 0 #000000`           | `shadow-l`                        | dialogs, the palette, popovers, panels |
-| `--shadow-drag`      | `10px 14px 0 rgba(59,36,22,0.35)` | `10px 14px 0 rgba(0,0,0,0.6)` | `0 12px 24px rgba(16,24,40,0.18)` | anything being dragged                 |
-| `--shadow-highlight` | `4px 4px 0 #E1A730`               | `4px 4px 0 #E1A730`           | `0 0 0 3px` accent-soft           | a field or preview that just changed   |
+| Variable                   | Discothèque light                 | Discothèque dark              | Folio (light)                     | Use                                    |
+| -------------------------- | --------------------------------- | ----------------------------- | --------------------------------- | -------------------------------------- |
+| `--shadow-press`           | `3px 3px 0 #3B2416`               | `3px 3px 0 #000000`           | `shadow-xs`                       | primary buttons at rest                |
+| `--shadow-lift`            | `4px 4px 0 #3B2416`               | `4px 4px 0 #000000`           | `shadow-s`                        | hovered cards, the selected nav item   |
+| `--shadow-dialog`          | `8px 8px 0 #3B2416`               | `8px 8px 0 #000000`           | `shadow-l`                        | dialogs, the palette, popovers, panels |
+| `--shadow-drag`            | `10px 14px 0 rgba(59,36,22,0.35)` | `10px 14px 0 rgba(0,0,0,0.6)` | `0 12px 24px rgba(16,24,40,0.18)` | anything being dragged                 |
+| `--shadow-highlight`       | `4px 4px 0 #E1A730`               | `4px 4px 0 #E1A730`           | `0 0 0 3px` accent-soft           | a field or preview that just changed   |
+| `--shadow-panel-highlight` | `none`                            | `4px 4px 0 #E1A730`           | `none`                            | a `--panel-highlight` panel            |
 
 Folio's shadows, light theme (dark uses black at higher opacity):
 

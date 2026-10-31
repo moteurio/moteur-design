@@ -119,6 +119,30 @@ fire at once and closes toasts before anyone sees them.
 The stylelint config (`@moteurio/design/stylelint`, see the README) flags that trick, raw
 durations and curves, and keyframes that move without `--travel`.
 
+### Tilt is for objects, or for landing
+
+Text sits straight at rest. Anything that holds words to read (a card, a ticket, a sticker, a
+note, a question) leans only as it arrives: give the lean to `--enter-turn`, with whatever offset
+it comes in from, and it settles straight once it has landed. The turn goes through `--travel`,
+so under reduced motion it is straight from the start and only fades in.
+
+```css
+.ticket {
+  --enter-y: 14px;
+  --enter-turn: -0.8deg;
+  animation: moteur-enter var(--motion-settle) var(--spring-settle) backwards;
+}
+```
+
+- **Objects may keep an angle.** A stamp, a photo, a screenshot or a pin is a thing on the page,
+  not a sentence, and can rest turned.
+- **A selection lands too.** Something that becomes picked, or the best match, can lean as it
+  does, with `--enter-opacity: 1` so it doesn't fade, then stand straight while it stays picked.
+- **Held things tilt while held.** The `lift` moment tilts a row while it's carried and
+  straightens it when it's put down: a moment, not a resting angle.
+- **A hover shouldn't be what straightens it.** If text needs a hover to sit level, it was
+  leaning at rest.
+
 ## A moment budget
 
 - One moment per action. Publishing gets the stamp; it doesn't also get a toast and confetti.

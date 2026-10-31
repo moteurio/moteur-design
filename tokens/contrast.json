@@ -92,6 +92,12 @@
       "for": "any text"
     },
     {
+      "fg": "on-panel-highlight",
+      "bg": "panel-highlight",
+      "min": 4.5,
+      "for": "any text"
+    },
+    {
       "fg": "rust",
       "bg": "paper",
       "min": 4.5,
@@ -275,6 +281,12 @@
     {
       "fg": ["focus", "focus-edge"],
       "bg": "paper-sunk",
+      "min": 3,
+      "for": "focus ring"
+    },
+    {
+      "fg": ["focus", "focus-edge"],
+      "bg": "panel-highlight",
       "min": 3,
       "for": "focus ring"
     },

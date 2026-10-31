@@ -873,7 +873,7 @@
       "name": "--mustard",
       "description": {
         "kind": "markdown",
-        "value": "The signature fill: selected item, 'needs you' tiles, review state, highlights. Always with ink text (6.7:1).\n\n- Discothèque: `#e1a730`\n- Folio: Light `#e8f0fc`, Dark `#17253b`"
+        "value": "The signature fill, for small things: the selected item, counts, review state, highlights. Always with ink text (6.7:1). A big 'needs you' panel takes panel-highlight.\n\n- Discothèque: `#e1a730`\n- Folio: Light `#e8f0fc`, Dark `#17253b`"
       }
     },
     {
@@ -954,6 +954,13 @@
       }
     },
     {
+      "name": "--on-panel-highlight",
+      "description": {
+        "kind": "markdown",
+        "value": "Text on panel-highlight: on-mustard in Lights on (6.7:1), ink in Lights off.\n\n- Discothèque: Lights on `#3b2416`, Lights off `#f7ebd0`\n- Folio: Light `#1c56b3`, Dark `#8db4f5`"
+      }
+    },
+    {
       "name": "--on-plum",
       "description": {
         "kind": "markdown",
@@ -993,6 +1000,13 @@
       "description": {
         "kind": "markdown",
         "value": "The edge of a text input, hovered or focused.\n\n- Discothèque: Lights on `var(--ink)` → `#3b2416`, Lights off `var(--ink)` → `#f7ebd0`\n- Folio: Light `var(--ink-line)` → `#7d8794`, Dark `var(--ink-line)` → `#6e7987`"
+      }
+    },
+    {
+      "name": "--panel-highlight",
+      "description": {
+        "kind": "markdown",
+        "value": "A big panel that calls for you ('needs you', getting started): mustard in Lights on, mustard-soft in Lights off, where a wall of mustard glares. Pair with on-panel-highlight and shadow-panel-highlight. Selections, counts and small highlights stay mustard.\n\n- Discothèque: Lights on `#e1a730`, Lights off `#3a2a0c`\n- Folio: Light `#e8f0fc`, Dark `#17253b`"
       }
     },
     {
@@ -1175,6 +1189,13 @@
       "description": {
         "kind": "markdown",
         "value": "Hovered cards, selected nav item.\n\n- Discothèque: Lights on `4px 4px 0 #3b2416`, Lights off `4px 4px 0 #000000`\n- Folio: Light `0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04)`, Dark `0 1px 3px rgba(0, 0, 0, 0.5)`"
+      }
+    },
+    {
+      "name": "--shadow-panel-highlight",
+      "description": {
+        "kind": "markdown",
+        "value": "The shadow of a panel-highlight panel: none in Lights on, where the panel is mustard already; a mustard offset in Lights off, so the soft panel still reads as the one that calls for you.\n\n- Discothèque: Lights on `none`, Lights off `4px 4px 0 #e1a730`\n- Folio: `none`"
       }
     },
     {

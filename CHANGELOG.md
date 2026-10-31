@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- A highlighted panel: `--panel-highlight`, `--on-panel-highlight` and
+  `--shadow-panel-highlight`, for a big panel that calls for you. In Lights on they are mustard,
+  on-mustard and no shadow, as before; in Lights off, mustard-soft, ink and a mustard offset
+  shadow, so a wall of mustard no longer glares. Full `--mustard` stays for selections, counts and
+  small highlights. Folio gives them `accent-soft`, `accent-text` and no shadow. Text and focus
+  rings on the panel are checked contrast pairs.
+- docs/motion.md: text sits straight at rest. Anything that holds words leans only as it arrives,
+  through `--enter-turn`, and settles straight; objects (stamps, photos, pins) may keep an angle.
 - The arrival is public: `moteur-enter` and `moteur-leave`, set with `--enter-x`, `--enter-y`,
   `--enter-scale`, `--enter-turn`, `--enter-opacity` and their `--leave-*` twins (registered, so
   they don't inherit), and `--motion-snap`, `--motion-pop`, `--motion-settle`, `--motion-glide`,

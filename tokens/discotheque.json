@@ -195,7 +195,7 @@
           "light": "#E1A730",
           "dark": "#E1A730"
         },
-        "usage": "The signature fill: selected item, 'needs you' tiles, review state, highlights. Always with ink text (6.7:1)."
+        "usage": "The signature fill, for small things: the selected item, counts, review state, highlights. Always with ink text (6.7:1). A big 'needs you' panel takes panel-highlight."
       },
       {
         "name": "on-mustard",
@@ -212,6 +212,22 @@
           "dark": "#3A2A0C"
         },
         "usage": "Inserted text in diffs, freshly added rows, warning suggestions."
+      },
+      {
+        "name": "panel-highlight",
+        "value": {
+          "light": "#E1A730",
+          "dark": "#3A2A0C"
+        },
+        "usage": "A big panel that calls for you ('needs you', getting started): mustard in Lights on, mustard-soft in Lights off, where a wall of mustard glares. Pair with on-panel-highlight and shadow-panel-highlight. Selections, counts and small highlights stay mustard."
+      },
+      {
+        "name": "on-panel-highlight",
+        "value": {
+          "light": "#3B2416",
+          "dark": "#F7EBD0"
+        },
+        "usage": "Text on panel-highlight: on-mustard in Lights on (6.7:1), ink in Lights off."
       },
       {
         "name": "orange",
@@ -629,6 +645,14 @@
           "dark": "4px 4px 0 #E1A730"
         },
         "usage": "A preview or field that just changed (new structure preview, toast)."
+      },
+      {
+        "name": "shadow-panel-highlight",
+        "value": {
+          "light": "none",
+          "dark": "4px 4px 0 #E1A730"
+        },
+        "usage": "The shadow of a panel-highlight panel: none in Lights on, where the panel is mustard already; a mustard offset in Lights off, so the soft panel still reads as the one that calls for you."
       }
     ]
   },
